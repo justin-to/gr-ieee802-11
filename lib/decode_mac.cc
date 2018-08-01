@@ -183,6 +183,7 @@ void descramble (uint8_t *decoded_bits) {
 	std::memset(out_bytes, 0, d_frame.psdu_size+2);
 
 	for(int i = 0; i < 7; i++) {
+		// packs from most to least significant bit of the decoded bits into state, bits 0 to 6
 		if(decoded_bits[i]) {
 			state |= 1 << (6 - i);
 		}
@@ -194,9 +195,12 @@ void descramble (uint8_t *decoded_bits) {
 
 	for(int i = 7; i < d_frame.psdu_size*8+16; i++) {
 		feedback = ((!!(state & 64))) ^ (!!(state & 8));
+		// returns 1 if the 7th or 4th bit is 1, but not both 
 		bit = feedback ^ (decoded_bits[i] & 0x1);
 		out_bytes[i/8] |= bit << (i%8);
+		// packs from least to most significant bit of the decoded bits
 		state = ((state << 1) & 0x7e) | feedback;
+		// left shift by 1, removes what was left shifted, preserving bits 1 through 6
 	}
 }
 
