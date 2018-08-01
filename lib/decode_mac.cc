@@ -178,7 +178,7 @@ void deinterleave() {
 
 
 void descramble (uint8_t *decoded_bits) {
-
+	// possibly for data whitening in DSSS, spreading bits out to increase robustness against localized noise
 	int state = 0;
 	std::memset(out_bytes, 0, d_frame.psdu_size+2);
 
