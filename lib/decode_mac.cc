@@ -49,6 +49,7 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 		gr_vector_const_void_star& input_items,
 		gr_vector_void_star& output_items) {
 
+	// first port within the block
 	const uint8_t *in = (const uint8_t*)input_items[0];
 
 	int i = 0;
@@ -70,6 +71,7 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 			}
 			d_frame_complete = false;
 
+			// polymorphic types carry data from one thread to another, converts from polymorphic type to int
 			pmt::pmt_t dict = tags[0].value;
 			int len_data = pmt::to_uint64(pmt::dict_ref(dict, pmt::mp("frame_bytes"), pmt::from_uint64(MAX_PSDU_SIZE+1)));
 			int encoding = pmt::to_uint64(pmt::dict_ref(dict, pmt::mp("encoding"), pmt::from_uint64(0)));
@@ -93,6 +95,7 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 			}
 		}
 
+		// checks for a complete frame 
 		if(copied < d_frame.n_sym) {
 			dout << "copy one symbol, copied " << copied << " out of " << d_frame.n_sym << std::endl;
 			std::memcpy(d_rx_symbols + (copied * 48), in, 48);
@@ -119,8 +122,10 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 
 void decode() {
 
+	// n_bpsc stands for number of bits per subcarrier
 	for(int i = 0; i < d_frame.n_sym * 48; i++) {
 		for(int k = 0; k < d_ofdm.n_bpsc; k++) {
+			// double not to guarentee a 1 or 0
 			d_rx_bits[i*d_ofdm.n_bpsc + k] = !!(d_rx_symbols[i] & (1 << k));
 		}
 	}
@@ -133,6 +138,7 @@ void decode() {
 	// skip service field
 	boost::crc_32_type result;
 	result.process_bytes(out_bytes + 2, d_frame.psdu_size);
+	// algorithm in Zmodem, should be converted to a string with l2bin(), probably do not need to change
 	if(result.checksum() != 558161692) {
 		dout << "checksum wrong -- dropping" << std::endl;
 		return;
@@ -141,7 +147,7 @@ void decode() {
 	mylog(boost::format("encoding: %1% - length: %2% - symbols: %3%")
 			% d_ofdm.encoding % d_frame.psdu_size % d_frame.n_sym);
 
-	// create PDU
+	// create protocol data unit
 	pmt::pmt_t blob = pmt::make_blob(out_bytes + 2, d_frame.psdu_size - 4);
 	pmt::pmt_t enc = pmt::from_uint64(d_ofdm.encoding);
 	pmt::pmt_t dict = pmt::make_dict();
@@ -155,20 +161,26 @@ void decode() {
 
 void deinterleave() {
 
+	// n_cbps stands for number of coded bits per subcarrier
+	// might need to change this, based on 16
 	int n_cbps = d_ofdm.n_cbps;
 	int first[n_cbps];
 	int second[n_cbps];
 	int s = std::max(d_ofdm.n_bpsc / 2, 1);
 
+	// doesn't seem to be unshuffling coded bits within subcarriers, not inverse of second permutation, does not account for interleaving size as seen in the paper
 	for(int j = 0; j < n_cbps; j++) {
 		first[j] = s * (j / s) + ((j + int(floor(16.0 * j / n_cbps))) % s);
 	}
 
+	// doesn't seem to be unscattering adjacent bits into nonadjacent subcarriers
 	for(int i = 0; i < n_cbps; i++) {
 		second[i] = 16 * i - (n_cbps - 1) * int(floor(16.0 * i / n_cbps));
 	}
 
 	int count = 0;
+	// d_rx_bits might be decrypted receive bits or discontinued receive bits
+	// loop rearranges each data bit within each symbol 
 	for(int i = 0; i < d_frame.n_sym; i++) {
 		for(int k = 0; k < n_cbps; k++) {
 			d_deinterleaved_bits[i * n_cbps + second[first[k]]] = d_rx_bits[i * n_cbps + k];
@@ -205,17 +217,21 @@ void descramble (uint8_t *decoded_bits) {
 }
 
 void print_output() {
+	// print for error checking, no need to change 
 
 	dout << std::endl;
 	dout << "psdu size" << d_frame.psdu_size << std::endl;
+	// why begin at index 2, skipping preamble?
 	for(int i = 2; i < d_frame.psdu_size+2; i++) {
 		dout << std::setfill('0') << std::setw(2) << std::hex << ((unsigned int)out_bytes[i] & 0xFF) << std::dec << " ";
+		// why 15, has to do with short training field?
 		if(i % 16 == 15) {
 			dout << std::endl;
 		}
 	}
 	dout << std::endl;
 	for(int i = 2; i < d_frame.psdu_size+2; i++) {
+		// why 127 and 31?
 		if((out_bytes[i] > 31) && (out_bytes[i] < 127)) {
 			dout << ((char) out_bytes[i]);
 		} else {

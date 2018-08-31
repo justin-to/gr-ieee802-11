@@ -5,7 +5,7 @@
 	<key>ieee802_11_mapper</key>
 	<category>[IEEE802.11]</category>
 	<import>import ieee802_11</import>
-	<make>ieee802_11.mapper($encoding, $debug)</make>
+	<make>ieee802_11.mapper($encoding, $debug, $num_subcarriers)</make>
 	<callback>set_encoding($encoding)</callback>
 
 	<param>
@@ -62,6 +62,12 @@
 			<name>Disable</name>
 			<key>False</key>
 		</option>
+	</param>
+
+	<param>
+		<name>Num Subs</name>
+		<key>num_subcarriers</key>
+		<type>int</type>
 	</param>
 
 	<check>$encoding in range(8)</check>

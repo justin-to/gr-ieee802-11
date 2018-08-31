@@ -44,6 +44,7 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 
 	message_port_register_out(pmt::mp("symbols"));
 
+	// bpsk stands for binary phase shift key ring
 	d_bpsk = constellation_bpsk::make();
 	d_qpsk = constellation_qpsk::make();
 	d_16qam = constellation_16qam::make();
@@ -104,6 +105,9 @@ frame_equalizer_impl::forecast (int noutput_items, gr_vector_int &ninput_items_r
 	ninput_items_required[0] = noutput_items;
 }
 
+
+// channel estimation and demodulation, guess
+// look into frame estimation math
 int
 frame_equalizer_impl::general_work (int noutput_items,
 		gr_vector_int &ninput_items,

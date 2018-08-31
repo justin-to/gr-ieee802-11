@@ -24,9 +24,7 @@ using namespace gr::ieee802_11;
 class mapper_impl : public mapper {
 public:
 
-static const int DATA_CARRIERS = 48;
-
-mapper_impl(Encoding e, bool debug) :
+mapper_impl(Encoding e, bool debug, int num_subcarriers) :
 	block ("mapper",
 			gr::io_signature::make(0, 0, 0),
 			gr::io_signature::make(1, 1, sizeof(char))),
@@ -34,7 +32,8 @@ mapper_impl(Encoding e, bool debug) :
 			d_symbols(NULL),
 			d_debug(debug),
 			d_scrambler(1),
-			d_ofdm(e) {
+			d_ofdm(e),
+			d_num_subs(num_subcarriers){
 
 	message_port_register_in(pmt::mp("in"));
 	set_encoding(e);
@@ -112,13 +111,13 @@ int general_work(int noutput, gr_vector_int& ninput_items,
 			puncturing(encoded_data, punctured_data, frame, d_ofdm);
 			//std::cout << "punctured" << std::endl;
 			// interleaving
-			interleave(punctured_data, interleaved_data, frame, d_ofdm);
+			interleave(punctured_data, interleaved_data, frame, d_ofdm, d_num_subs);
 			//std::cout << "interleaved" << std::endl;
 
 			// one byte per symbol
-			split_symbols(interleaved_data, symbols, frame, d_ofdm);
+			split_symbols(interleaved_data, symbols, frame, d_ofdm, d_num_subs);
 
-			d_symbols_len = frame.n_sym * 48;
+			d_symbols_len = frame.n_sym * d_num_subs;
 
 			d_symbols = (char*)calloc(d_symbols_len, 1);
 			std::memcpy(d_symbols, symbols, d_symbols_len);
@@ -178,10 +177,11 @@ private:
 	int          d_symbols_offset;
 	int          d_symbols_len;
 	ofdm_param   d_ofdm;
+	int			 d_num_subs;
 	gr::thread::mutex d_mutex;
 };
 
 mapper::sptr
-mapper::make(Encoding mcs, bool debug) {
-	return gnuradio::get_initial_sptr(new mapper_impl(mcs, debug));
+mapper::make(Encoding mcs, bool debug, int num_subcarriers) {
+	return gnuradio::get_initial_sptr(new mapper_impl(mcs, debug, num_subcarriers));
 }

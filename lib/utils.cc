@@ -203,19 +203,21 @@ void puncturing(const char *in, char *out, frame_param &frame, ofdm_param &ofdm)
 }
 
 
-void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse) {
+void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse, int num_subcarriers) {
 
 	int n_cbps = ofdm.n_cbps;
 	int first[n_cbps];
 	int second[n_cbps];
 	int s = std::max(ofdm.n_bpsc / 2, 1);
+	// make sure to use nse numbers that are a multiple of 3, can make error check later
+	int num_rows = num_subcarriers / 3; 
 
 	for(int j = 0; j < n_cbps; j++) {
-		first[j] = s * (j / s) + ((j + int(floor(16.0 * j / n_cbps))) % s);
+		first[j] = s * (j / s) + ((j + int(floor(num_rows * j / n_cbps))) % s);
 	}
 
 	for(int i = 0; i < n_cbps; i++) {
-		second[i] = 16 * i - (n_cbps - 1) * int(floor(16.0 * i / n_cbps));
+		second[i] = num_rows * i - (n_cbps - 1) * int(floor(num_rows * i / n_cbps));
 	}
 
 	for(int i = 0; i < frame.n_sym; i++) {
@@ -230,9 +232,9 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 }
 
 
-void split_symbols(const char *in, char *out, frame_param &frame, ofdm_param &ofdm) {
+void split_symbols(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, int num_subcarriers) {
 
-	int symbols = frame.n_sym * 48;
+	int symbols = frame.n_sym * num_subcarriers;
 
 	for (int i = 0; i < symbols; i++) {
 		out[i] = 0;
