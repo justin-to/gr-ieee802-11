@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2013, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,9 +29,9 @@ using namespace gr::ieee802_11;
 class decode_mac_impl : public decode_mac {
 
 public:
-decode_mac_impl(bool log, bool debug) :
+decode_mac_impl(bool log, bool debug, int num_subcarriers) :
 	block("decode_mac",
-			gr::io_signature::make(1, 1, 48),
+			gr::io_signature::make(1, 1, num_subcarriers),
 			gr::io_signature::make(0, 0, 0)),
 	d_log(log),
 	d_debug(debug),
@@ -40,7 +40,8 @@ decode_mac_impl(bool log, bool debug) :
 	d_freq_offset(0.0),
 	d_ofdm(BPSK_1_2),
 	d_frame(d_ofdm, 0),
-	d_frame_complete(true) {
+	d_frame_complete(true),
+	d_num_subs(num_subcarriers){
 
 	message_port_register_out(pmt::mp("out"));
 }
@@ -71,7 +72,7 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 			}
 			d_frame_complete = false;
 
-			// polymorphic types carry data from one thread to another, converts from polymorphic type to int
+			// polymorphic types carry data from one thread to another, converts from polymorphic type to int, state information data
 			pmt::pmt_t dict = tags[0].value;
 			int len_data = pmt::to_uint64(pmt::dict_ref(dict, pmt::mp("frame_bytes"), pmt::from_uint64(MAX_PSDU_SIZE+1)));
 			int encoding = pmt::to_uint64(pmt::dict_ref(dict, pmt::mp("encoding"), pmt::from_uint64(0)));
@@ -98,20 +99,19 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 		// checks for a complete frame 
 		if(copied < d_frame.n_sym) {
 			dout << "copy one symbol, copied " << copied << " out of " << d_frame.n_sym << std::endl;
-			std::memcpy(d_rx_symbols + (copied * 48), in, 48);
+			std::memcpy(d_rx_symbols + (copied * d_num_subs), in, d_num_subs);
 			copied++;
-
 			if(copied == d_frame.n_sym) {
 				dout << "received complete frame - decoding" << std::endl;
 				decode();
-				in += 48;
+				in += d_num_subs;
 				i++;
 				d_frame_complete = true;
 				break;
 			}
 		}
 
-		in += 48;
+		in += d_num_subs;
 		i++;
 	}
 
@@ -123,7 +123,8 @@ int general_work (int noutput_items, gr_vector_int& ninput_items,
 void decode() {
 
 	// n_bpsc stands for number of bits per subcarrier
-	for(int i = 0; i < d_frame.n_sym * 48; i++) {
+	// converts symbol stream into a unpacked bit stream
+	for(int i = 0; i < d_frame.n_sym * d_num_subs; i++) {
 		for(int k = 0; k < d_ofdm.n_bpsc; k++) {
 			// double not to guarentee a 1 or 0
 			d_rx_bits[i*d_ofdm.n_bpsc + k] = !!(d_rx_symbols[i] & (1 << k));
@@ -131,6 +132,7 @@ void decode() {
 	}
 
 	deinterleave();
+	// likely to be viterbii decoder
 	uint8_t *decoded = d_decoder.decode(&d_ofdm, &d_frame, d_deinterleaved_bits);
 	descramble(decoded);
 	print_output();
@@ -167,15 +169,17 @@ void deinterleave() {
 	int first[n_cbps];
 	int second[n_cbps];
 	int s = std::max(d_ofdm.n_bpsc / 2, 1);
+	// not elegant, can do a modulo later with an error message to ensure user inputs multiple of 3
+	int num_rows = d_num_subs / 3;
 
 	// doesn't seem to be unshuffling coded bits within subcarriers, not inverse of second permutation, does not account for interleaving size as seen in the paper
 	for(int j = 0; j < n_cbps; j++) {
-		first[j] = s * (j / s) + ((j + int(floor(16.0 * j / n_cbps))) % s);
+		first[j] = s * (j / s) + ((j + int(floor(num_rows * j / n_cbps))) % s);
 	}
 
 	// doesn't seem to be unscattering adjacent bits into nonadjacent subcarriers
 	for(int i = 0; i < n_cbps; i++) {
-		second[i] = 16 * i - (n_cbps - 1) * int(floor(16.0 * i / n_cbps));
+		second[i] = num_rows * i - (n_cbps - 1) * int(floor(num_rows * i / n_cbps));
 	}
 
 	int count = 0;
@@ -252,16 +256,18 @@ private:
 	double d_freq_offset;  // frequency offset, Hz
 	viterbi_decoder d_decoder;
 
-	uint8_t d_rx_symbols[48 * MAX_SYM];
+	// change 48 to input variable by user, might have to make a pointer
+	uint8_t d_rx_symbols[d_num_subs * MAX_SYM];
 	uint8_t d_rx_bits[MAX_ENCODED_BITS];
 	uint8_t d_deinterleaved_bits[MAX_ENCODED_BITS];
 	uint8_t out_bytes[MAX_PSDU_SIZE + 2]; // 2 for signal field
 
 	int copied;
 	bool d_frame_complete;
+	int d_num_subs;
 };
 
 decode_mac::sptr
-decode_mac::make(bool log, bool debug) {
-	return gnuradio::get_initial_sptr(new decode_mac_impl(log, debug));
+decode_mac::make(bool log, bool debug, int num_subcarriers) {
+	return gnuradio::get_initial_sptr(new decode_mac_impl(log, debug, num_subcarriers));
 }

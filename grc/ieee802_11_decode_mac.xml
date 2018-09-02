@@ -5,7 +5,7 @@
 	<key>ieee802_11_decode_mac</key>
 	<category>[IEEE802.11]</category>
 	<import>import ieee802_11</import>
-	<make>ieee802_11.decode_mac($log, $debug)</make>
+	<make>ieee802_11.decode_mac($log, $debug, $num_subcarriers)</make>
 
 	<param>
 		<name>Log</name>
@@ -37,6 +37,12 @@
 			<name>Disable</name>
 			<key>False</key>
 		</option>
+	</param>
+	
+	<param>
+		<name>Num Subs</name>
+		<key>num_subcarriers</key>
+		<type>int</type>
 	</param>
 
 	<sink>
