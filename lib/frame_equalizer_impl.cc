@@ -28,19 +28,26 @@ namespace gr {
 namespace ieee802_11 {
 
 frame_equalizer::sptr
-frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug) {
+frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots) {
 	return gnuradio::get_initial_sptr
-		(new frame_equalizer_impl(algo, freq, bw, log, debug));
+		(new frame_equalizer_impl(algo, freq, bw, log, debug, num_subcarriers, num_data_carriers, num_pilots));
 }
 
-
-frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug) :
+frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots) :
 	gr::block("frame_equalizer",
-			gr::io_signature::make(1, 1, 64 * sizeof(gr_complex)),
-			gr::io_signature::make(1, 1, 48)),
+			gr::io_signature::make(1, 1, num_subcarriers * sizeof(gr_complex)),
+			gr::io_signature::make(1, 1, num_data_carriers)),
 	d_current_symbol(0), d_log(log), d_debug(debug), d_equalizer(NULL),
 	d_freq(freq), d_bw(bw), d_frame_bytes(0), d_frame_symbols(0),
-	d_freq_offset_from_synclong(0.0) {
+	d_freq_offset_from_synclong(0.0),
+	d_num_subs(num_subcarriers), d_num_data(num_data_carriers),
+	d_num_pilots(num_pilots) {
+
+	//raw pointers to allocated memory 
+	d_prev_pilots = new gr_complex[d_num_pilots];
+	d_deinterleaved = new gr_complex[d_num_data];
+	symbols = new gr_complex[d_num_data];
+	interleaver_pattern = new int[d_num_data];
 
 	message_port_register_out(pmt::mp("symbols"));
 
@@ -57,6 +64,10 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 }
 
 frame_equalizer_impl::~frame_equalizer_impl() {
+	delete[] d_prev_pilots;
+	delete[] d_deinterleaved;
+	delete[] symbols;
+	delete[] interleaver_pattern;
 }
 
 
@@ -67,6 +78,8 @@ frame_equalizer_impl::set_algorithm(Equalizer algo) {
 
 	switch(algo) {
 
+		// under library equalizer, needs to change one of these
+		// choose the default strategy to change
 	case COMB:
 		dout << "Comb" << std::endl;
 		d_equalizer = new equalizer::comb();
@@ -121,8 +134,8 @@ frame_equalizer_impl::general_work (int noutput_items,
 
 	int i = 0;
 	int o = 0;
-	gr_complex symbols[48];
-	gr_complex current_symbol[64];
+	gr_complex symbols[d_num_data];
+	gr_complex current_symbol[d_num_subs];
 
 	dout << "FRAME EQUALIZER: input " << ninput_items[0] << "  output " << noutput_items << std::endl;
 
@@ -149,13 +162,14 @@ frame_equalizer_impl::general_work (int noutput_items,
 			continue;
 		}
 
-		std::memcpy(current_symbol, in + i*64, 64*sizeof(gr_complex));
+		std::memcpy(current_symbol, in + i*d_num_subs, d_num_subs*sizeof(gr_complex));
 
-		// compensate sampling offset
-		for(int i = 0; i < 64; i++) {
+		// compensate sampling offset, probably needs change
+		// ask about the hardcoded 64 here, probably needs change
+		for(int i = 0; i < d_num_subs; i++) {
 			current_symbol[i] *= exp(gr_complex(0, 2*M_PI*d_current_symbol*80*(d_epsilon0 + d_er)*(i-32)/64));
 		}
-
+		// look at the 127 and the minuses that come in 
 		gr_complex p = equalizer::base::POLARITY[(d_current_symbol - 2) % 127];
 		gr_complex sum =
 			(current_symbol[11] *  p) +
@@ -193,7 +207,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		d_prev_pilots[3] = current_symbol[53] * -p;
 
 		// compensate residual frequency offset
-		for(int i = 0; i < 64; i++) {
+		for(int i = 0; i < d_num_subs; i++) {
 			current_symbol[i] *= exp(gr_complex(0, -beta));
 		}
 
@@ -206,12 +220,12 @@ frame_equalizer_impl::general_work (int noutput_items,
 
 		// do equalization
 		d_equalizer->equalize(current_symbol, d_current_symbol,
-				symbols, out + o * 48, d_frame_mod);
+				symbols, out + o * d_num_data, d_frame_mod);
 
 		// signal field
 		if(d_current_symbol == 2) {
 
-			if(decode_signal_field(out + o * 48)) {
+			if(decode_signal_field(out + o * d_num_data)) {
 
 				pmt::pmt_t dict = pmt::make_dict();
 				dict = pmt::dict_add(dict, pmt::mp("frame_bytes"), pmt::from_uint64(d_frame_bytes));
@@ -229,7 +243,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		if(d_current_symbol > 2) {
 			o++;
 			pmt::pmt_t pdu = pmt::make_dict();
-			message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(48, symbols)));
+			message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(d_num_data, symbols)));
 		}
 
 		i++;
@@ -254,7 +268,7 @@ frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
 
 void
 frame_equalizer_impl::deinterleave(uint8_t *rx_bits) {
-	for(int i = 0; i < 48; i++) {
+	for(int i = 0; i < d_num_data; i++) {
 		d_deinterleaved[i] = rx_bits[interleaver_pattern[i]];
 	}
 }
@@ -267,7 +281,7 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 	bool parity = false;
 	for(int i = 0; i < 17; i++) {
 		parity ^= decoded_bits[i];
-
+		// hardcoded 4, number of pilots possibly?
 		if((i < 4) && decoded_bits[i]) {
 			r = r | (1 << i);
 		}
@@ -282,6 +296,7 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 		return false;
 	}
 
+	// look into the 16 hardcoded here
 	switch(r) {
 	case 11:
 		d_frame_encoding = 0;
@@ -341,6 +356,9 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 	return true;
 }
 
+/* hardcoded 48, change to function that calculates on the fly
+ how to make sure this function gets called? Thinking xml callback
+
 const int
 frame_equalizer_impl::interleaver_pattern[48] = {
 	 0, 3, 6, 9,12,15,18,21,
@@ -349,6 +367,19 @@ frame_equalizer_impl::interleaver_pattern[48] = {
 	25,28,31,34,37,40,43,46,
 	 2, 5, 8,11,14,17,20,23,
 	26,29,32,35,38,41,44,47};
+	*/
+
+const int 
+frame_equalizaer_impl::interleave_pattern_calc(){
+	int array_val = 0;
+	for (int index = 0; index < d_num_data, index++) {
+		(interleaver_pattern + index)* = array_val;
+		array_val += 3;
+		if (array_val >= d_num_data) {
+			array_val += 1;
+		}
+	}
+}
 
 } /* namespace ieee802_11 */
 } /* namespace gr */

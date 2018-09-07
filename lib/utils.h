@@ -110,9 +110,9 @@ void convolutional_encoding(const char *input, char *out, frame_param &frame);
 
 void puncturing(const char *input, char *out, frame_param &frame, ofdm_param &ofdm);
 
-void interleave(const char *input, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse = false, int num_subcarriers);
+void interleave(const char *input, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse = false, int num_subcarriers = 48);
 
-void split_symbols(const char *input, char *out, frame_param &frame, ofdm_param &ofdm, int num_subcarriers);
+void split_symbols(const char *input, char *out, frame_param &frame, ofdm_param &ofdm, int num_subcarriers = 48);
 
 void generate_bits(const char *psdu, char *data_bits, frame_param &frame);
 

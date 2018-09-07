@@ -30,7 +30,7 @@ class frame_equalizer_impl : virtual public frame_equalizer
 {
 
 public:
-	frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug);
+	frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots);
 	~frame_equalizer_impl();
 
 	void set_algorithm(Equalizer algo);
@@ -58,20 +58,28 @@ private:
 	int  d_current_symbol;
 	viterbi_decoder d_decoder;
 
+	// added function to perform interleave pattern calculation
+	// has no check for numbers that are not mutiples of 3, can add error message later
+	const int interleave_pattern_calc();
+
 	// freq offset
 	double d_freq;  // Hz
 	double d_freq_offset_from_synclong;  // Hz, estimation from "sync_long" block
 	double d_bw;  // Hz
 	double d_er;
 	double d_epsilon0;
-	gr_complex d_prev_pilots[4];
+	// 4 for the number of pilots?
+	gr_complex *d_prev_pilots;
 
 	int  d_frame_bytes;
 	int  d_frame_symbols;
 	int  d_frame_encoding;
+	int  d_num_subs;
+	int  d_num_data;
+	int  d_num_pilots;
 
-	uint8_t d_deinterleaved[48];
-	gr_complex symbols[48];
+	uint8_t *d_deinterleaved;
+	gr_complex *symbols;
 
 	boost::shared_ptr<gr::digital::constellation> d_frame_mod;
 	constellation_bpsk::sptr d_bpsk;
@@ -79,7 +87,7 @@ private:
 	constellation_16qam::sptr d_16qam;
 	constellation_64qam::sptr d_64qam;
 
-	static const int interleaver_pattern[48];
+	static const int *interleaver_pattern;
 };
 
 } // namespace ieee802_11

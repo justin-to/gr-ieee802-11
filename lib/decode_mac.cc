@@ -43,7 +43,15 @@ decode_mac_impl(bool log, bool debug, int num_subcarriers) :
 	d_frame_complete(true),
 	d_num_subs(num_subcarriers){
 
+	// raw pointer to allocated memory
+	d_rx_symbols = new uint8_t[MAX_SYM * num_subcarriers];
+
 	message_port_register_out(pmt::mp("out"));
+}
+
+// not ideal if program crashes, memory leak
+decode_mac_impl::~decode_mac_impl(){
+	delete[] d_rx_symbols;
 }
 
 int general_work (int noutput_items, gr_vector_int& ninput_items,
@@ -254,17 +262,17 @@ private:
 	double d_snr;  // dB
 	double d_nom_freq;  // nominal frequency, Hz
 	double d_freq_offset;  // frequency offset, Hz
+	int d_num_subs;
 	viterbi_decoder d_decoder;
 
-	// change 48 to input variable by user, might have to make a pointer
-	uint8_t d_rx_symbols[d_num_subs * MAX_SYM];
+	// memory of d_rx_symbols allocation is changed to variable input by user
+	uint8_t *d_rx_symbols;
 	uint8_t d_rx_bits[MAX_ENCODED_BITS];
 	uint8_t d_deinterleaved_bits[MAX_ENCODED_BITS];
 	uint8_t out_bytes[MAX_PSDU_SIZE + 2]; // 2 for signal field
 
 	int copied;
 	bool d_frame_complete;
-	int d_num_subs;
 };
 
 decode_mac::sptr
