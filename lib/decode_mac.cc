@@ -50,7 +50,7 @@ decode_mac_impl(bool log, bool debug, int num_subcarriers) :
 }
 
 // not ideal if program crashes, memory leak
-decode_mac_impl::~decode_mac_impl(){
+~decode_mac_impl(){
 	delete[] d_rx_symbols;
 }
 

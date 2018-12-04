@@ -28,12 +28,12 @@ namespace gr {
 namespace ieee802_11 {
 
 frame_equalizer::sptr
-frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots) {
+frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, std::vector<std::vector<int>> &occupied_carriers) {
 	return gnuradio::get_initial_sptr
-		(new frame_equalizer_impl(algo, freq, bw, log, debug, num_subcarriers, num_data_carriers, num_pilots));
+		(new frame_equalizer_impl(algo, freq, bw, log, debug, num_subcarriers, num_data_carriers, num_pilots, occupied_carriers));
 }
 
-frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots) :
+frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, std::vector<std::vector<int>> &occupied_carriers) :
 	gr::block("frame_equalizer",
 			gr::io_signature::make(1, 1, num_subcarriers * sizeof(gr_complex)),
 			gr::io_signature::make(1, 1, num_data_carriers)),
@@ -41,11 +41,11 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 	d_freq(freq), d_bw(bw), d_frame_bytes(0), d_frame_symbols(0),
 	d_freq_offset_from_synclong(0.0),
 	d_num_subs(num_subcarriers), d_num_data(num_data_carriers),
-	d_num_pilots(num_pilots) {
+	d_num_pilots(num_pilots), d_occupied_carriers(occupied_carriers) {
 
 	//raw pointers to allocated memory 
 	d_prev_pilots = new gr_complex[d_num_pilots];
-	d_deinterleaved = new gr_complex[d_num_data];
+	d_deinterleaved = new uint8_t[d_num_data];
 	symbols = new gr_complex[d_num_data];
 	interleaver_pattern = new int[d_num_data];
 
@@ -78,8 +78,9 @@ frame_equalizer_impl::set_algorithm(Equalizer algo) {
 
 	switch(algo) {
 
-		// under library equalizer, needs to change one of these
-		// choose the default strategy to change
+	// under library equalizer, needs to change one of these
+	// choose the default strategy to change
+	/* Only LMS has been implemented at this point
 	case COMB:
 		dout << "Comb" << std::endl;
 		d_equalizer = new equalizer::comb();
@@ -88,14 +89,17 @@ frame_equalizer_impl::set_algorithm(Equalizer algo) {
 		dout << "LS" << std::endl;
 		d_equalizer = new equalizer::ls();
 		break;
+	*/
 	case LMS:
 		dout << "LMS" << std::endl;
 		d_equalizer = new equalizer::lms();
 		break;
+	/*
 	case STA:
 		dout << "STA" << std::endl;
 		d_equalizer = new equalizer::sta();
 		break;
+	*/
 	default:
 		throw std::runtime_error("Algorithm not implemented");
 	}
@@ -132,6 +136,9 @@ frame_equalizer_impl::general_work (int noutput_items,
 	const gr_complex *in = (const gr_complex *) input_items[0];
 	uint8_t *out = (uint8_t *) output_items[0];
 
+  if (d_occupied_carriers.empty()) {
+    throw std::invalid_argument("Occupied carriers must be of type vector of vector i.e. ((),).");
+  }
 	int i = 0;
 	int o = 0;
 	gr_complex symbols[d_num_data];
@@ -220,7 +227,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 
 		// do equalization
 		d_equalizer->equalize(current_symbol, d_current_symbol,
-				symbols, out + o * d_num_data, d_frame_mod);
+				symbols, out + o * d_num_data, d_frame_mod, d_occupied_carriers[0]);
 
 		// signal field
 		if(d_current_symbol == 2) {
@@ -369,11 +376,10 @@ frame_equalizer_impl::interleaver_pattern[48] = {
 	26,29,32,35,38,41,44,47};
 	*/
 
-const int 
-frame_equalizaer_impl::interleave_pattern_calc(){
+void frame_equalizer_impl::interleave_pattern_calc() {
 	int array_val = 0;
-	for (int index = 0; index < d_num_data, index++) {
-		(interleaver_pattern + index)* = array_val;
+	for (int index = 0; index < d_num_data; index++) {
+		interleaver_pattern[index] = array_val;
 		array_val += 3;
 		if (array_val >= d_num_data) {
 			array_val += 1;

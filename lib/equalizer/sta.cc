@@ -30,6 +30,7 @@ void sta::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, bo
 		double signal = 0;
 		double noise = 0;
 		for(int i = 0; i < 64; i++) {
+			// ignore the nulls
 			if((i == 32) || (i < 6) || ( i > 58)) {
 				continue;
 			}
@@ -55,6 +56,8 @@ void sta::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, bo
 
 		int c = 0;
 		for(int i = 0; i < 64; i++) {
+			// 11, 25, 39, 53 are pilots, rest are nulls
+			// we need to also ignore the unwanted data carriers here
 			if( (i == 11) || (i == 25) || (i == 32) || (i == 39) || (i == 53) || (i < 6) || ( i > 58)) {
 				continue;
 			} else {
@@ -71,6 +74,7 @@ void sta::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, bo
 			int n = 0;
 			gr_complex s = 0;
 			for(int k = i-beta; k <= i+beta; k++) {
+				// ignore the nulls
 				if((k == 32) || (k < 6) || ( k > 58)) {
 					continue;
 				}

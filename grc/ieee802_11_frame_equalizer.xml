@@ -5,7 +5,7 @@
 	<key>ieee802_11_frame_equalizer</key>
 	<category>[IEEE802.11]</category>
 	<import>import ieee802_11</import>
-	<make>ieee802_11.frame_equalizer($algo, $freq, $bw, $log, $debug, $num_subcarriers, $num_data_subcarriers, $num_pilots)</make>
+	<make>ieee802_11.frame_equalizer($algo, $freq, $bw, $log, $debug, $num_subcarriers, $num_data_subcarriers, $num_pilots, $occupied_carriers)</make>
 	<callback>set_algorithm($algo)</callback>
 	<callback>set_frequency($freq)</callback>
 	<callback>set_bandwidth($bw)</callback>
@@ -96,6 +96,12 @@
 		<name>Num Pilots</name>
 		<key>num_pilots</key>
 		<type>int</type>
+	</param>
+
+	<param>
+    <name>Occupied Carriers</name>
+    <key>occupied_carriers</key>
+    <type>raw</type>
 	</param>
 
 	<sink>

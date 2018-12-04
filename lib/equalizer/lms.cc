@@ -17,11 +17,13 @@
 
 #include "lms.h"
 #include <cstring>
+#include <algorithm>
 #include <iostream>
 
 using namespace gr::ieee802_11::equalizer;
 
-void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod) {
+void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits,
+	boost::shared_ptr<gr::digital::constellation> mod, std::vector<int> &occupied_carriers) {
 
 	if(n == 0) {
 		std::memcpy(d_H, in, 64 * sizeof(gr_complex));
@@ -30,7 +32,8 @@ void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, bo
 		double signal = 0;
 		double noise = 0;
 		for(int i = 0; i < 64; i++) {
-			if((i == 32) || (i < 6) || ( i > 58)) {
+			// ignore the nulls and unoccupied carriers
+			if((i == 32) || (i < 6) || ( i > 58) || (std::find(occupied_carriers.begin(), occupied_carriers.end(), i) == occupied_carriers.end())) {
 				continue;
 			}
 			noise += std::pow(std::abs(d_H[i] - in[i]), 2);
@@ -44,7 +47,9 @@ void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, bo
 	} else {
 		int c = 0;
 		for(int i = 0; i < 64; i++) {
-			if( (i == 11) || (i == 25) || (i == 32) || (i == 39) || (i == 53) || (i < 6) || ( i > 58)) {
+			// 11, 25, 39, 53 are pilots, rest are nulls
+			// we need to also ignore the unwanted data carriers here
+			if((i == 11) || (i == 25) || (i == 32) || (i == 39) || (i == 53) || (i < 6) || ( i > 58) || (std::find(occupied_carriers.begin(), occupied_carriers.end(), i) == occupied_carriers.end())) {
 				continue;
 			} else {
 				symbols[c] = in[i] / d_H[i];

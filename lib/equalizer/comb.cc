@@ -40,6 +40,8 @@ void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, b
 
 	for(int i = 0; i < 64; i++) {
 		gr_complex H;
+		// 11, 25, 39, 53 are pilots
+		// we need to also ignore the unwanted data carriers here
 		if(i <= 11) {
 			H = gr_complex((11-i) / 11.0, 0) * avg      + gr_complex( i     / 11.0, 0) * pilot[0];
 		} else if(i <= 25) {
