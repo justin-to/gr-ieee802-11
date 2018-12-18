@@ -28,12 +28,12 @@ namespace gr {
 namespace ieee802_11 {
 
 frame_equalizer::sptr
-frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, std::vector<std::vector<int>> &occupied_carriers) {
+frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, const std::vector<std::vector<int>> &occupied_carriers) {
 	return gnuradio::get_initial_sptr
 		(new frame_equalizer_impl(algo, freq, bw, log, debug, num_subcarriers, num_data_carriers, num_pilots, occupied_carriers));
 }
 
-frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, std::vector<std::vector<int>> &occupied_carriers) :
+frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, const std::vector<std::vector<int>> &occupied_carriers) :
 	gr::block("frame_equalizer",
 			gr::io_signature::make(1, 1, num_subcarriers * sizeof(gr_complex)),
 			gr::io_signature::make(1, 1, num_data_carriers)),
@@ -48,6 +48,7 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 	d_deinterleaved = new uint8_t[d_num_data];
 	symbols = new gr_complex[d_num_data];
 	interleaver_pattern = new int[d_num_data];
+	interleave_pattern_calc();
 
 	message_port_register_out(pmt::mp("symbols"));
 
@@ -265,7 +266,7 @@ bool
 frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
 
 	static ofdm_param ofdm(BPSK_1_2);
-	static frame_param frame(ofdm, 0);
+	static frame_param frame(ofdm, 0);;
 
 	deinterleave(rx_bits);
 	uint8_t *decoded_bits = d_decoder.decode(&ofdm, &frame, d_deinterleaved);

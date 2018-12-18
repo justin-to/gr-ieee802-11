@@ -30,7 +30,7 @@ class frame_equalizer_impl : virtual public frame_equalizer
 {
 
 public:
-	frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, std::vector<std::vector<int>> &occupied_carriers);
+	frame_equalizer_impl(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, const std::vector<std::vector<int>> &occupied_carriers);
 	~frame_equalizer_impl();
 
 	void set_algorithm(Equalizer algo);
@@ -57,7 +57,7 @@ private:
 	bool d_log;
 	int  d_current_symbol;
 	viterbi_decoder d_decoder;
-	std::vector<std::vector<int>> d_occupied_carriers;
+	const std::vector<std::vector<int>> d_occupied_carriers;
 
 	// added function to perform interleave pattern calculation
 	// has no check for numbers that are not mutiples of 3, can add error message later

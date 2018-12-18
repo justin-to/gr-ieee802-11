@@ -23,7 +23,7 @@
 using namespace gr::ieee802_11::equalizer;
 
 void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits,
-	boost::shared_ptr<gr::digital::constellation> mod, std::vector<int> &occupied_carriers) {
+	boost::shared_ptr<gr::digital::constellation> mod, const std::vector<int> &occupied_carriers) {
 
 	if(n == 0) {
 		std::memcpy(d_H, in, 64 * sizeof(gr_complex));

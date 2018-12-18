@@ -1244,6 +1244,10 @@
       <key>minoutbuf</key>
       <value>0</value>
     </param>
+    <param>
+      <key>num_subcarriers</key>
+      <value>48</value>
+    </param>
   </block>
   <block>
     <key>ieee802_11_frame_equalizer</key>
@@ -1302,6 +1306,22 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>num_data_subcarriers</key>
+      <value>48</value>
+    </param>
+    <param>
+      <key>num_pilots</key>
+      <value>4</value>
+    </param>
+    <param>
+      <key>num_subcarriers</key>
+      <value>64</value>
+    </param>
+    <param>
+      <key>occupied_carriers</key>
+      <value>(range(-26, -21) + range(-20, -7) + range(-6, 0) + range(1, 7) + range(8, 21) + range(22, 27),)</value>
     </param>
   </block>
   <block>
@@ -3626,7 +3646,7 @@
     <source_block_id>blocks_delay_0</source_block_id>
     <sink_block_id>ieee802_11_sync_long_0</sink_block_id>
     <source_key>0</source_key>
-    <sink_key>1</sink_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_delay_0_0</source_block_id>
@@ -3740,7 +3760,7 @@
     <source_block_id>ieee802_11_sync_short_0</source_block_id>
     <sink_block_id>ieee802_11_sync_long_0</sink_block_id>
     <source_key>0</source_key>
-    <sink_key>0</sink_key>
+    <sink_key>1</sink_key>
   </connection>
   <connection>
     <source_block_id>uhd_usrp_source_0</source_block_id>
