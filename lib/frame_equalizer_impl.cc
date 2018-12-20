@@ -379,11 +379,13 @@ frame_equalizer_impl::interleaver_pattern[48] = {
 
 void frame_equalizer_impl::interleave_pattern_calc() {
 	int array_val = 0;
+	int temp_array_val = 0;
 	for (int index = 0; index < d_num_data; index++) {
 		interleaver_pattern[index] = array_val;
 		array_val += 3;
 		if (array_val >= d_num_data) {
-			array_val += 1;
+			temp_array_val += 1;
+			array_val = temp_array_val;
 		}
 	}
 }
