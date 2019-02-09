@@ -113,7 +113,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>ieee802_11.signal_field()</value>
+      <value>ieee802_11_baofdm.signal_field()</value>
     </param>
   </block>
   <block>
@@ -167,7 +167,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>43</value>
+      <value>48</value>
     </param>
   </block>
   <block>
@@ -762,7 +762,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>ieee802_11.LMS</value>
+      <value>ieee802_11_baofdm.LMS</value>
     </param>
   </block>
   <block>
@@ -1033,7 +1033,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>ieee802_11.BPSK_1_2</value>
+      <value>ieee802_11_baofdm.BPSK_1_2</value>
     </param>
   </block>
   <block>
@@ -1210,7 +1210,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_chunks_to_symbols_xx</key>
+    <key>ieee802_11_baofdm_chunks_to_symbols_xx</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1237,7 +1237,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_chunks_to_symbols_xx_0</value>
+      <value>ieee802_11_baofdm_chunks_to_symbols_xx_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1249,7 +1249,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_decode_mac</key>
+    <key>ieee802_11_baofdm_decode_mac</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1280,7 +1280,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_decode_mac_0</value>
+      <value>ieee802_11_baofdm_decode_mac_0</value>
     </param>
     <param>
       <key>log</key>
@@ -1300,7 +1300,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_frame_equalizer</key>
+    <key>ieee802_11_baofdm_frame_equalizer</key>
     <param>
       <key>algo</key>
       <value>chan_est</value>
@@ -1343,7 +1343,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_frame_equalizer_0</value>
+      <value>ieee802_11_baofdm_frame_equalizer_0</value>
     </param>
     <param>
       <key>log</key>
@@ -1375,7 +1375,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_mapper</key>
+    <key>ieee802_11_baofdm_mapper</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1390,7 +1390,7 @@
     </param>
     <param>
       <key>debug</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1410,7 +1410,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_mapper_0</value>
+      <value>ieee802_11_baofdm_mapper_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1426,7 +1426,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_moving_average_xx</key>
+    <key>ieee802_11_baofdm_moving_average_xx</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1453,7 +1453,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_moving_average_xx_0</value>
+      <value>ieee802_11_baofdm_moving_average_xx_0</value>
     </param>
     <param>
       <key>length</key>
@@ -1473,7 +1473,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_moving_average_xx</key>
+    <key>ieee802_11_baofdm_moving_average_xx</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1500,7 +1500,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_moving_average_xx_1</value>
+      <value>ieee802_11_baofdm_moving_average_xx_1</value>
     </param>
     <param>
       <key>length</key>
@@ -1782,7 +1782,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_sync_long</key>
+    <key>ieee802_11_baofdm_sync_long</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1833,7 +1833,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_sync_short</key>
+    <key>ieee802_11_baofdm_sync_short</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1895,7 +1895,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_complex_to_mag_squared_0</source_block_id>
-    <sink_block_id>ieee802_11_moving_average_xx_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_moving_average_xx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1931,7 +1931,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_multiply_xx_0</source_block_id>
-    <sink_block_id>ieee802_11_moving_average_xx_1</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_moving_average_xx_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1979,60 +1979,60 @@
   </connection>
   <connection>
     <source_block_id>fft_vxx_0_1</source_block_id>
-    <sink_block_id>ieee802_11_frame_equalizer_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_frame_equalizer_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_chunks_to_symbols_xx_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_chunks_to_symbols_xx_0</source_block_id>
     <sink_block_id>blocks_tagged_stream_mux_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_decode_mac_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_decode_mac_0</source_block_id>
     <sink_block_id>pad_sink_2</sink_block_id>
     <source_key>out</source_key>
     <sink_key>in</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_frame_equalizer_0</source_block_id>
-    <sink_block_id>ieee802_11_decode_mac_0</sink_block_id>
+    <source_block_id>ieee802_11_baofdm_frame_equalizer_0</source_block_id>
+    <sink_block_id>ieee802_11_baofdm_decode_mac_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_frame_equalizer_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_frame_equalizer_0</source_block_id>
     <sink_block_id>pad_sink_1</sink_block_id>
     <source_key>symbols</source_key>
     <sink_key>in</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_mapper_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_mapper_0</source_block_id>
     <sink_block_id>digital_packet_headergenerator_bb_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_mapper_0</source_block_id>
-    <sink_block_id>ieee802_11_chunks_to_symbols_xx_0</sink_block_id>
+    <source_block_id>ieee802_11_baofdm_mapper_0</source_block_id>
+    <sink_block_id>ieee802_11_baofdm_chunks_to_symbols_xx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_moving_average_xx_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_moving_average_xx_0</source_block_id>
     <sink_block_id>blocks_divide_xx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_moving_average_xx_1</source_block_id>
+    <source_block_id>ieee802_11_baofdm_moving_average_xx_1</source_block_id>
     <sink_block_id>blocks_complex_to_mag_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_moving_average_xx_1</source_block_id>
+    <source_block_id>ieee802_11_baofdm_moving_average_xx_1</source_block_id>
     <sink_block_id>sync_short</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
@@ -2057,7 +2057,7 @@
   </connection>
   <connection>
     <source_block_id>pad_source_1</source_block_id>
-    <sink_block_id>ieee802_11_mapper_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_mapper_0</sink_block_id>
     <source_key>out</source_key>
     <sink_key>in</sink_key>
   </connection>

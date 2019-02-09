@@ -21,7 +21,7 @@
 #include <ieee802-11/constellations.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class chunks_to_symbols_impl : public chunks_to_symbols
 {
@@ -42,7 +42,7 @@ private:
 	constellation_64qam::sptr d_64qam;
 };
 
-} /* namespace ieee802_11 */
+} /* namespace ieee802_11_baofdm */
 } /* namespace gr */
 
 #endif /* INCLUDED_IEEE802_11_CHUNKS_TO_SYMBOLS_IMPL_H */

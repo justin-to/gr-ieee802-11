@@ -18,7 +18,7 @@
 #include "utils.h"
 #include <gnuradio/io_signature.h>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 
 class mapper_impl : public mapper {

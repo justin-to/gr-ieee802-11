@@ -108,7 +108,7 @@ As a first step I recommend to test the ```wifi_loopback.grc``` flow graph. This
 
 If GRC complains that it can't find some blocks (other than performance counters and hierarchical blocks) like
 
-    >>> Error: Block key "ieee802_11_ofdm_mac" not found in Platform - grc(GNU Radio Companion)
+    >>> Error: Block key "ieee802_11_baofdm_ofdm_mac" not found in Platform - grc(GNU Radio Companion)
     >>> Error: Block key "foo_packet_pad" not found in Platform - grc(GNU Radio Companion)
 
 Most likely you used a different ```CMAKE_INSTALL_PREFIX``` for the module than for GNU Radio. Therefore, the blocks of the module ended up in a different directory and GRC can't find them. You have to tell GRC where these blocks are by creating/adding to your ```~/.gnuradio/config.conf``` something like

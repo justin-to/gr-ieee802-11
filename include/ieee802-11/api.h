@@ -19,7 +19,7 @@
 
 #include <gnuradio/attributes.h>
 
-#ifdef gnuradio_ieee802_11_EXPORTS
+#ifdef gnuradio_ieee802_11_baofdm_EXPORTS
 #  define IEEE802_11_API __GR_ATTR_EXPORT
 #else
 #  define IEEE802_11_API __GR_ATTR_IMPORT

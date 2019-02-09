@@ -30,7 +30,7 @@ if __name__ == '__main__':
     root, inp = sys.argv[1:3]
     for sig in sys.argv[3:]:
         name = re.sub ('X+', sig, root)
-        d = build_utils.standard_dict(name, sig, 'ieee802_11')
+        d = build_utils.standard_dict(name, sig, 'ieee802_11_baofdm')
         build_utils.expand_template(d, inp)
 
 ")
@@ -58,7 +58,7 @@ endmacro(expand_h)
 
 expand_h(moving_average_XX ff cc)
 
-add_custom_target(ieee802_11_generated_includes DEPENDS
+add_custom_target(ieee802_11_baofdm_generated_includes DEPENDS
     ${generated_includes}
 )
 
@@ -84,6 +84,6 @@ list(APPEND include_sources
 
 install(
 	FILES ${include_sources}
-	DESTINATION ${GR_INCLUDE_DIR}/gnuradio/ieee802_11
-	COMPONENT "ieee802_11_devel"
+	DESTINATION ${GR_INCLUDE_DIR}/gnuradio/ieee802_11_baofdm
+	COMPONENT "ieee802_11_baofdm_devel"
 )

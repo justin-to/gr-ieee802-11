@@ -32,7 +32,7 @@ enum Encoding {
 };
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API mapper : virtual public block
 {
@@ -43,7 +43,7 @@ public:
 	virtual void set_encoding(Encoding mcs) = 0;
 };
 
-}  // namespace ieee802_11
+}  // namespace ieee802_11_baofdm
 }  // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_MAPPER_H */

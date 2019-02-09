@@ -20,7 +20,7 @@
 #include <ieee802-11/@NAME@.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class @NAME_IMPL@ : public @NAME@
 {

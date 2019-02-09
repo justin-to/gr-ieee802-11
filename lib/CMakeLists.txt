@@ -34,7 +34,7 @@ if __name__ == '__main__':
     root, inp = sys.argv[1:3]
     for sig in sys.argv[3:]:
         name = re.sub ('X+', sig, root)
-        d = build_utils.standard_dict(name, sig, 'ieee802_11')
+        d = build_utils.standard_dict(name, sig, 'ieee802_11_baofdm')
         build_utils.expand_template(d, inp, '_impl')
 ")
 
@@ -86,13 +86,13 @@ endmacro(expand_cc_h_impl)
 # Invoke macro to generate various sources
 ########################################################################
 expand_cc_h_impl(moving_average_XX cc ff)
-add_custom_target(ieee802_11_generated_sources DEPENDS ${generated_sources})
-add_dependencies(ieee802_11_generated_sources ieee802_11_generated_includes)
+add_custom_target(ieee802_11_baofdm_generated_sources DEPENDS ${generated_sources})
+add_dependencies(ieee802_11_baofdm_generated_sources ieee802_11_baofdm_generated_includes)
 
 ########################################################################
 # Setup library
 ########################################################################
-list(APPEND gr_ieee802_11_sources
+list(APPEND gr_ieee802_11_baofdm_sources
     ${generated_sources}
     chunks_to_symbols_impl.cc
     constellations_impl.cc
@@ -114,21 +114,21 @@ list(APPEND gr_ieee802_11_sources
     viterbi_decoder.cc
 )
 
-list(APPEND gr_ieee802_11_libs
+list(APPEND gr_ieee802_11_baofdm_libs
     ${Boost_LIBRARIES}
     ${GNURADIO_ALL_LIBRARIES}
     ${LOG4CPP_LIBRARIES}
 )
 
-add_library(gnuradio-ieee802_11 SHARED ${gr_ieee802_11_sources})
-add_dependencies(gnuradio-ieee802_11 ieee802_11_generated_sources)
-target_link_libraries(gnuradio-ieee802_11 ${gr_ieee802_11_libs})
-set_target_properties(gnuradio-ieee802_11 PROPERTIES DEFINE_SYMBOL "gnuradio_ieee802_11_EXPORTS")
+add_library(gnuradio-ieee802_11_baofdm SHARED ${gr_ieee802_11_baofdm_sources})
+add_dependencies(gnuradio-ieee802_11_baofdm ieee802_11_baofdm_generated_sources)
+target_link_libraries(gnuradio-ieee802_11_baofdm ${gr_ieee802_11_baofdm_libs})
+set_target_properties(gnuradio-ieee802_11_baofdm PROPERTIES DEFINE_SYMBOL "gnuradio_ieee802_11_baofdm_EXPORTS")
 
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-ieee802_11
+install(TARGETS gnuradio-ieee802_11_baofdm
     LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
     ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
     RUNTIME DESTINATION bin              # .dll file

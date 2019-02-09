@@ -20,7 +20,7 @@
 #include <ieee802-11/ether_encap.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 	struct ethernet_header {
 		uint8_t   dest[6];
@@ -41,7 +41,7 @@ namespace ieee802_11 {
 			uint16_t d_last_seq;
 	};
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_ETHER_ENCAP_IMPL_H */

@@ -32,7 +32,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 class mac_impl : public mac {
 

@@ -23,7 +23,7 @@
 #include <list>
 #include <tuple>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 using namespace std;
 
 

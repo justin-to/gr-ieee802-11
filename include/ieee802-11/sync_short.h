@@ -21,7 +21,7 @@
 #include <gnuradio/block.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API sync_short : virtual public block
 {
@@ -32,7 +32,7 @@ public:
 
 };
 
-}  // namespace ieee802_11
+}  // namespace ieee802_11_baofdm
 }  // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_SYNC_SHORT_H */

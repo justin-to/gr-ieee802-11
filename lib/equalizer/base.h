@@ -22,7 +22,7 @@
 #include <gnuradio/digital/constellation.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 namespace equalizer {
 
 class base {
@@ -39,7 +39,7 @@ protected:
 };
 
 } /* namespace channel_estimation */
-} /* namespace ieee802_11 */
+} /* namespace ieee802_11_baofdm */
 } /* namespace gr */
 
 #endif /* INCLUDED_IEEE802_11_EQUALIZER_BASE_H */

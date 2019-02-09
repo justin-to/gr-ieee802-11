@@ -22,7 +22,7 @@
 #include "utils.h"
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class signal_field_impl : public signal_field
 {
@@ -40,7 +40,7 @@ private:
 	void generate_signal_field(char *out, frame_param &frame, ofdm_param &ofdm);
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_SIGNAL_FIELD_IMPL_H */

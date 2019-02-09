@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
 	<name>Moving Average</name>
-	<key>ieee802_11_moving_average_xx</key>
-	<category>[IEEE802.11]</category>
-	<import>import ieee802_11</import>
-	<make>ieee802_11.moving_average_$(type.fcn)($length)</make>
+	<key>ieee802_11_baofdm_moving_average_xx</key>
+	<category>[BA_OFDM_IEEE802.11]</category>
+	<import>import ieee802_11_baofdm</import>
+	<make>ieee802_11_baofdm.moving_average_$(type.fcn)($length)</make>
 	<callback>set_length($length)</callback>
 	<param>
 		<name>Type</name>

@@ -173,7 +173,7 @@
     </param>
     <param>
       <key>options</key>
-      <value>[ieee802_11.LS, ieee802_11.LMS, ieee802_11.STA, ieee802_11.COMB]</value>
+      <value>[ieee802_11_baofdm.LS, ieee802_11_baofdm.LMS, ieee802_11_baofdm.STA, ieee802_11_baofdm.COMB]</value>
     </param>
     <param>
       <key>orient</key>
@@ -979,7 +979,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_mac</key>
+    <key>ieee802_11_baofdm_mac</key>
     <param>
       <key>bss_mac</key>
       <value>[0xff, 0xff, 0xff, 0xff, 0xff, 0xff]</value>
@@ -1014,7 +1014,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_mac_0</value>
+      <value>ieee802_11_baofdm_mac_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1030,7 +1030,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_parse_mac</key>
+    <key>ieee802_11_baofdm_parse_mac</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1045,7 +1045,7 @@
     </param>
     <param>
       <key>debug</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1061,7 +1061,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_parse_mac_0</value>
+      <value>ieee802_11_baofdm_parse_mac_0</value>
     </param>
     <param>
       <key>log</key>
@@ -1778,7 +1778,7 @@
   </block>
   <connection>
     <source_block_id>blocks_message_strobe_0</source_block_id>
-    <sink_block_id>ieee802_11_mac_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_mac_0</sink_block_id>
     <source_key>strobe</source_key>
     <sink_key>app in</sink_key>
   </connection>
@@ -1819,13 +1819,13 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_mac_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_mac_0</source_block_id>
     <sink_block_id>wifi_phy_hier_0</sink_block_id>
     <source_key>phy out</source_key>
     <sink_key>mac_in</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_parse_mac_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_parse_mac_0</source_block_id>
     <sink_block_id>blocks_pdu_to_tagged_stream_0</sink_block_id>
     <source_key>fer</source_key>
     <sink_key>pdus</sink_key>
@@ -1850,7 +1850,7 @@
   </connection>
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
-    <sink_block_id>ieee802_11_parse_mac_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_parse_mac_0</sink_block_id>
     <source_key>mac_out</source_key>
     <sink_key>in</sink_key>
   </connection>

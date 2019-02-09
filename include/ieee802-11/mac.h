@@ -21,7 +21,7 @@
 #include <gnuradio/block.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API mac : virtual public block
 {
@@ -33,7 +33,7 @@ public:
 			std::vector<uint8_t> bss_mac);
 };
 
-}  // namespace ieee802_11
+}  // namespace ieee802_11_baofdm
 }  // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_MAC_H */

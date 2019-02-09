@@ -81,7 +81,7 @@
 	}
 
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 
 viterbi_decoder::viterbi_decoder() :

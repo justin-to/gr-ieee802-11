@@ -18,7 +18,7 @@
 #include <gnuradio/io_signature.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 @NAME_IMPL@::@NAME_IMPL@(int length) :
 		sync_block("@NAME@",

@@ -22,7 +22,7 @@
 #include <gnuradio/digital/packet_header_default.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API signal_field : virtual public digital::packet_header_default
 {
@@ -34,7 +34,7 @@ protected:
 	signal_field();
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_SIGNAL_FIELD_H */

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.8.git'?>
+<?grc format='1' created='3.7.13'?>
 <flow_graph>
   <timestamp>Fri Jul 18 10:38:08 2014</timestamp>
   <block>
@@ -73,12 +73,20 @@
       <value>True</value>
     </param>
     <param>
+      <key>sizing_mode</key>
+      <value>fixed</value>
+    </param>
+    <param>
       <key>thread_safe_setters</key>
       <value></value>
     </param>
     <param>
       <key>title</key>
       <value></value>
+    </param>
+    <param>
+      <key>placement</key>
+      <value>(0,0)</value>
     </param>
   </block>
   <block>
@@ -89,7 +97,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -165,7 +173,7 @@
     </param>
     <param>
       <key>options</key>
-      <value>[ieee802_11.LS, ieee802_11.LMS, ieee802_11.STA, ieee802_11.COMB]</value>
+      <value>[ieee802_11_baofdm.LS, ieee802_11_baofdm.LMS, ieee802_11_baofdm.STA, ieee802_11_baofdm.COMB]</value>
     </param>
     <param>
       <key>orient</key>
@@ -722,7 +730,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>file</key>
@@ -981,7 +989,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1009,7 +1017,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_ether_encap</key>
+    <key>ieee802_11_baofdm_ether_encap</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1040,7 +1048,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_ether_encap_0</value>
+      <value>ieee802_11_baofdm_ether_encap_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1052,7 +1060,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_mac</key>
+    <key>ieee802_11_baofdm_mac</key>
     <param>
       <key>bss_mac</key>
       <value>[0x42, 0x42, 0x42, 0x42, 0x42, 0x42]</value>
@@ -1087,7 +1095,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_mac_0</value>
+      <value>ieee802_11_baofdm_mac_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -1103,7 +1111,7 @@
     </param>
   </block>
   <block>
-    <key>ieee802_11_parse_mac</key>
+    <key>ieee802_11_baofdm_parse_mac</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -1134,7 +1142,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>ieee802_11_parse_mac_0</value>
+      <value>ieee802_11_baofdm_parse_mac_0</value>
     </param>
     <param>
       <key>log</key>
@@ -3731,7 +3739,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_tuntap_pdu_0</source_block_id>
-    <sink_block_id>ieee802_11_ether_encap_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_ether_encap_0</sink_block_id>
     <source_key>pdus</source_key>
     <sink_key>from tap</sink_key>
   </connection>
@@ -3748,19 +3756,19 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_ether_encap_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_ether_encap_0</source_block_id>
     <sink_block_id>blocks_tuntap_pdu_0</sink_block_id>
     <source_key>to tap</source_key>
     <sink_key>pdus</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_ether_encap_0</source_block_id>
-    <sink_block_id>ieee802_11_mac_0</sink_block_id>
+    <source_block_id>ieee802_11_baofdm_ether_encap_0</source_block_id>
+    <sink_block_id>ieee802_11_baofdm_mac_0</sink_block_id>
     <source_key>to wifi</source_key>
     <sink_key>app in</sink_key>
   </connection>
   <connection>
-    <source_block_id>ieee802_11_mac_0</source_block_id>
+    <source_block_id>ieee802_11_baofdm_mac_0</source_block_id>
     <sink_block_id>wifi_phy_hier_0</sink_block_id>
     <source_key>phy out</source_key>
     <sink_key>mac_in</sink_key>
@@ -3785,19 +3793,19 @@
   </connection>
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
-    <sink_block_id>ieee802_11_ether_encap_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_ether_encap_0</sink_block_id>
     <source_key>mac_out</source_key>
     <sink_key>from wifi</sink_key>
   </connection>
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
-    <sink_block_id>ieee802_11_mac_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_mac_0</sink_block_id>
     <source_key>mac_out</source_key>
     <sink_key>phy in</sink_key>
   </connection>
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
-    <sink_block_id>ieee802_11_parse_mac_0</sink_block_id>
+    <sink_block_id>ieee802_11_baofdm_parse_mac_0</sink_block_id>
     <source_key>mac_out</source_key>
     <sink_key>in</sink_key>
   </connection>

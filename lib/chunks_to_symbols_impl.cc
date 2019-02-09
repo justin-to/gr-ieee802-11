@@ -20,7 +20,7 @@
 #include <gnuradio/tag_checker.h>
 #include <assert.h>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 chunks_to_symbols::sptr
 chunks_to_symbols::make()

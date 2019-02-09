@@ -16,7 +16,7 @@
  */
 #include "constellations_impl.h"
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 constellation_bpsk::sptr
 constellation_bpsk::make() {

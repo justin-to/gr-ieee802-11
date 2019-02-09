@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 static const int MIN_GAP = 480;
 static const int MAX_SAMPLES = 540 * 80;

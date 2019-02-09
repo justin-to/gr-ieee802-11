@@ -21,7 +21,7 @@
 #include <gnuradio/block_detail.h>
 #include <string>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 ether_encap_impl::ether_encap_impl(bool debug) :
 		block("ether_encap",

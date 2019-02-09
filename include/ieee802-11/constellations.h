@@ -22,12 +22,12 @@
 #include <gnuradio/digital/constellation.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API constellation_bpsk : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::ieee802_11::constellation_bpsk> sptr;
+	typedef boost::shared_ptr<gr::ieee802_11_baofdm::constellation_bpsk> sptr;
 	static sptr make();
 
 protected:
@@ -37,7 +37,7 @@ protected:
 class IEEE802_11_API constellation_qpsk : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::ieee802_11::constellation_qpsk> sptr;
+	typedef boost::shared_ptr<gr::ieee802_11_baofdm::constellation_qpsk> sptr;
 	static sptr make();
 
 protected:
@@ -47,7 +47,7 @@ protected:
 class IEEE802_11_API constellation_16qam : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::ieee802_11::constellation_16qam> sptr;
+	typedef boost::shared_ptr<gr::ieee802_11_baofdm::constellation_16qam> sptr;
 	static sptr make();
 
 protected:
@@ -57,14 +57,14 @@ protected:
 class IEEE802_11_API constellation_64qam : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::ieee802_11::constellation_64qam> sptr;
+	typedef boost::shared_ptr<gr::ieee802_11_baofdm::constellation_64qam> sptr;
 	static sptr make();
 
 protected:
 	constellation_64qam();
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_CONSTELLATIONS_H */

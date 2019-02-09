@@ -21,7 +21,7 @@
 #include "utils.h"
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 // Maximum number of traceback bytes
 #define TRACEBACK_MAX 24
@@ -83,7 +83,7 @@ private:
 			__m128i *pp0, int ntraceback, unsigned char *outbuf);
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_VITERBI_DECODER_H */

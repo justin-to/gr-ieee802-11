@@ -21,7 +21,7 @@
 #include <gnuradio/tagged_stream_block.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API chunks_to_symbols : virtual public tagged_stream_block
 {
@@ -30,7 +30,7 @@ public:
         static sptr make();
 };
 
-} /* namespace ieee802_11 */
+} /* namespace ieee802_11_baofdm */
 } /* namespace gr */
 
 #endif /* INCLUDED_IEEE802_11_CHUNKS_TO_SYMBOLS_H */

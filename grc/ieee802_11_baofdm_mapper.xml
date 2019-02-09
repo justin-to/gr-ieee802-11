@@ -2,49 +2,49 @@
 
 <block>
 	<name>WiFi Mapper</name>
-	<key>ieee802_11_mapper</key>
-	<category>[IEEE802.11]</category>
-	<import>import ieee802_11</import>
-	<make>ieee802_11.mapper($encoding, $debug, $num_subcarriers)</make>
+	<key>ieee802_11_baofdm_mapper</key>
+	<category>[BA_OFDM_IEEE802.11]</category>
+	<import>import ieee802_11_baofdm</import>
+	<make>ieee802_11_baofdm.mapper($encoding, $debug, $num_subcarriers)</make>
 	<callback>set_encoding($encoding)</callback>
 
 	<param>
 		<name>Encoding</name>
 		<key>encoding</key>
-		<value>ieee802_11.BPSK_1_2</value>
+		<value>ieee802_11_baofdm.BPSK_1_2</value>
 		<type>int</type>
 
 		<option>
 			<name>BPSK 1/2</name>
-			<key>ieee802_11.BPSK_1_2</key>
+			<key>ieee802_11_baofdm.BPSK_1_2</key>
 		</option>
 		<option>
 			<name>BPSK 3/4</name>
-			<key>ieee802_11.BPSK_3_4</key>
+			<key>ieee802_11_baofdm.BPSK_3_4</key>
 		</option>
 		<option>
 			<name>QPSK 1/2</name>
-			<key>ieee802_11.QPSK_1_2</key>
+			<key>ieee802_11_baofdm.QPSK_1_2</key>
 		</option>
 		<option>
 			<name>QPSK 3/4</name>
-			<key>ieee802_11.QPSK_3_4</key>
+			<key>ieee802_11_baofdm.QPSK_3_4</key>
 		</option>
 		<option>
 			<name>16QAM 1/2</name>
-			<key>ieee802_11.16QAM_1_2</key>
+			<key>ieee802_11_baofdm.16QAM_1_2</key>
 		</option>
 		<option>
 			<name>16QAM 3/4</name>
-			<key>ieee802_11.16QAM_3_4</key>
+			<key>ieee802_11_baofdm.16QAM_3_4</key>
 		</option>
 		<option>
 			<name>64QAM 2/3</name>
-			<key>ieee802_11.64QAM_2_3</key>
+			<key>ieee802_11_baofdm.64QAM_2_3</key>
 		</option>
 		<option>
 			<name>64QAM 3/4</name>
-			<key>ieee802_11.64QAM_3_4</key>
+			<key>ieee802_11_baofdm.64QAM_3_4</key>
 		</option>
 	</param>
 

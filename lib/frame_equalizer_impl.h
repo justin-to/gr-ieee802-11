@@ -24,7 +24,7 @@
 #include "viterbi_decoder.h"
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class frame_equalizer_impl : virtual public frame_equalizer
 {
@@ -91,7 +91,7 @@ private:
 	int *interleaver_pattern;
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_FRAME_EQUALIZER_IMPL_H */

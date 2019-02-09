@@ -2,10 +2,10 @@
 
 <block>
 	<name>WiFi MAC</name>
-	<key>ieee802_11_mac</key>
-	<category>[IEEE802.11]</category>
-	<import>import ieee802_11</import>
-	<make>ieee802_11.mac($src_mac, $dst_mac, $bss_mac)</make>
+	<key>ieee802_11_baofdm_mac</key>
+	<category>[BA_OFDM_IEEE802.11]</category>
+	<import>import ieee802_11_baofdm</import>
+	<make>ieee802_11_baofdm.mac($src_mac, $dst_mac, $bss_mac)</make>
 
 	<param>
 		<name>SRC MAC</name>

@@ -21,7 +21,7 @@
 #include <gnuradio/block_detail.h>
 #include <string>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 class parse_mac_impl : public parse_mac {
 

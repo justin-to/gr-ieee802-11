@@ -22,7 +22,7 @@
 #include <boost/crc.hpp>
 #include <gnuradio/io_signature.h>
 
-using namespace gr::ieee802_11;
+using namespace gr::ieee802_11_baofdm;
 
 #define LINKTYPE_IEEE802_11 105 /* http://www.tcpdump.org/linktypes.html */
 

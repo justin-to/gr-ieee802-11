@@ -19,7 +19,7 @@
 
 %include "gnuradio.i"
 
-%include "ieee802_11_swig_doc.i"
+%include "ieee802_11_baofdm_swig_doc.i"
 
 %{
 #include "ieee802-11/chunks_to_symbols.h"
@@ -58,43 +58,43 @@
 %include "ieee802-11/sync_long.h"
 %include "ieee802-11/sync_short.h"
 
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, chunks_to_symbols);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, decode_mac);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, ether_encap);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, frame_equalizer);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, mac);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, mapper);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, moving_average_cc);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, moving_average_ff);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, parse_mac);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, sync_long);
-GR_SWIG_BLOCK_MAGIC2(ieee802_11, sync_short);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, chunks_to_symbols);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, decode_mac);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, ether_encap);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, frame_equalizer);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, mac);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, mapper);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, moving_average_cc);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, moving_average_ff);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, parse_mac);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, sync_long);
+GR_SWIG_BLOCK_MAGIC2(ieee802_11_baofdm, sync_short);
 
-%template(signal_field_sptr) boost::shared_ptr<gr::ieee802_11::signal_field>;
+%template(signal_field_sptr) boost::shared_ptr<gr::ieee802_11_baofdm::signal_field>;
 %pythoncode %{
 signal_field_sptr.__repr__ = lambda self: "<signal_field>"
 signal_field = signal_field.make;
 %}
 
-%template(constellation_bpsk_sptr) boost::shared_ptr<gr::ieee802_11::constellation_bpsk>;
+%template(constellation_bpsk_sptr) boost::shared_ptr<gr::ieee802_11_baofdm::constellation_bpsk>;
 %pythoncode %{
 constellation_bpsk_sptr.__repr__ = lambda self: "<constellation BPSK>"
 constellation_bpsk = constellation_bpsk.make;
 %}
 
-%template(constellation_qpsk_sptr) boost::shared_ptr<gr::ieee802_11::constellation_qpsk>;
+%template(constellation_qpsk_sptr) boost::shared_ptr<gr::ieee802_11_baofdm::constellation_qpsk>;
 %pythoncode %{
 constellation_qpsk_sptr.__repr__ = lambda self: "<constellation QPSK>"
 constellation_qpsk = constellation_qpsk.make;
 %}
 
-%template(constellation_16qam_sptr) boost::shared_ptr<gr::ieee802_11::constellation_16qam>;
+%template(constellation_16qam_sptr) boost::shared_ptr<gr::ieee802_11_baofdm::constellation_16qam>;
 %pythoncode %{
 constellation_16qam_sptr.__repr__ = lambda self: "<constellation 16QAM>"
 constellation_16qam = constellation_16qam.make;
 %}
 
-%template(constellation_64qam_sptr) boost::shared_ptr<gr::ieee802_11::constellation_64qam>;
+%template(constellation_64qam_sptr) boost::shared_ptr<gr::ieee802_11_baofdm::constellation_64qam>;
 %pythoncode %{
 constellation_64qam_sptr.__repr__ = lambda self: "<constellation 64QAM>"
 constellation_64qam = constellation_64qam.make;

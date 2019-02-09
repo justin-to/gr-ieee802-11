@@ -31,7 +31,7 @@ enum Equalizer {
 };
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 class IEEE802_11_API frame_equalizer : virtual public gr::block
 {
@@ -45,7 +45,7 @@ public:
 	virtual void set_frequency(double freq) = 0;
 };
 
-} // namespace ieee802_11
+} // namespace ieee802_11_baofdm
 } // namespace gr
 
 #endif /* INCLUDED_IEEE802_11_FRAME_EQUALIZER_H */

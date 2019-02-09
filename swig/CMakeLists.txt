@@ -39,28 +39,28 @@ foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
     list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gnuradio/swig)
 endforeach(incdir)
 
-set(GR_SWIG_LIBRARIES gnuradio-ieee802_11)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/ieee802_11_swig_doc.i)
+set(GR_SWIG_LIBRARIES gnuradio-ieee802_11_baofdm)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/ieee802_11_baofdm_swig_doc.i)
 set(GR_SWIG_DOC_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/../include/ieee802-11/
     ${CMAKE_CURRENT_BINARY_DIR}/../include/ieee802-11/
 )
 
-set(GR_SWIG_TARGET_DEPS ieee802_11_generated_includes)
+set(GR_SWIG_TARGET_DEPS ieee802_11_baofdm_generated_includes)
 
-GR_SWIG_MAKE(ieee802_11_swig ieee802_11_swig.i)
+GR_SWIG_MAKE(ieee802_11_baofdm_swig ieee802_11_baofdm_swig.i)
 
 ########################################################################
 # Install the build swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS ieee802_11_swig DESTINATION ${GR_PYTHON_DIR}/ieee802_11)
+GR_SWIG_INSTALL(TARGETS ieee802_11_baofdm_swig DESTINATION ${GR_PYTHON_DIR}/ieee802_11_baofdm)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
     FILES
-    ieee802_11_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/ieee802_11_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/ieee802_11/swig
+    ieee802_11_baofdm_swig.i
+    ${CMAKE_CURRENT_BINARY_DIR}/ieee802_11_baofdm_swig_doc.i
+    DESTINATION ${GR_INCLUDE_DIR}/ieee802_11_baofdm/swig
 )

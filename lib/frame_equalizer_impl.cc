@@ -25,7 +25,7 @@
 #include <gnuradio/io_signature.h>
 
 namespace gr {
-namespace ieee802_11 {
+namespace ieee802_11_baofdm {
 
 frame_equalizer::sptr
 frame_equalizer::make(Equalizer algo, double freq, double bw, bool log, bool debug, int num_subcarriers, int num_data_carriers, int num_pilots, const std::vector<std::vector<int>> &occupied_carriers) {
@@ -390,5 +390,5 @@ void frame_equalizer_impl::interleave_pattern_calc() {
 	}
 }
 
-} /* namespace ieee802_11 */
+} /* namespace ieee802_11_baofdm */
 } /* namespace gr */
