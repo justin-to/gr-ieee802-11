@@ -8,3 +8,4 @@ examples/*.py
 **/.DS_Store
 .clang_complete
 .vscode/
+.unittests
