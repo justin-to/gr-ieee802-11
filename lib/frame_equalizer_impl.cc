@@ -81,11 +81,12 @@ frame_equalizer_impl::set_algorithm(Equalizer algo) {
 
 	// under library equalizer, needs to change one of these
 	// choose the default strategy to change
-	/* Only LMS has been implemented at this point
+	// Only LMS has been implemented at this point
 	case COMB:
 		dout << "Comb" << std::endl;
 		d_equalizer = new equalizer::comb();
 		break;
+	/*
 	case LS:
 		dout << "LS" << std::endl;
 		d_equalizer = new equalizer::ls();

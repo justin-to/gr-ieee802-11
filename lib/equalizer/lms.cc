@@ -33,7 +33,7 @@ void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits,
 		double noise = 0;
 		for(int i = 0; i < 64; i++) {
 			// ignore the nulls and unoccupied carriers
-			if((i == 32) || (i < 6) || ( i > 58) || (std::find(occupied_carriers.begin(), occupied_carriers.end(), i) == occupied_carriers.end())) {
+			if((i == 32) || (i < 6) || ( i > 58) || (std::find(occupied_carriers.begin(), occupied_carriers.end(), i) == occupied_carriers.end() && (i != 11) && (i != 25) && (i != 39) && (i != 53))) {
 				continue;
 			}
 			noise += std::pow(std::abs(d_H[i] - in[i]), 2);

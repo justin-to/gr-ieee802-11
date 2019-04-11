@@ -19,7 +19,7 @@
 
 using namespace gr::ieee802_11_baofdm::equalizer;
 
-void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod) {
+void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod, const std::vector<int>&occupied_carriers) {
 
 	gr_complex pilot[4];
 
