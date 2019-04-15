@@ -90,7 +90,7 @@ public:
 	void print();
 };
 
-const BYTE SHARED_SECRET[] = {0xF3, 0x9D, 0x59, 0x9C};
+const uint8_t SHARED_SECRET[] = {0xF3, 0x9D, 0x59, 0x9C};
 #define SHARED_SECRET_SIZE 4
 
 /**
