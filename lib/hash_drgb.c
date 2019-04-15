@@ -4,7 +4,7 @@
 #include "hash_drgb.h"
 #include "sha256.h"
 
-Status hash_df(BYTE* inputStr, 
+Status hash_df(const BYTE* inputStr, 
                uint32_t inputStrLen,
                uint32_t bytesToReturn,
                BYTE* outputString,
