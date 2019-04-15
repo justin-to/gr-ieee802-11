@@ -219,7 +219,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 
 	// Initialize deterministic random number generator
 	hash_drgb_init(&drgb,
-				   (BYTE*)SHARED_SECRET, SHARED_SECRET_SIZE,
+				   (uint8_t*)SHARED_SECRET, SHARED_SECRET_SIZE,
 				   NULL, 0,
 				   NULL, 0);
 
@@ -259,7 +259,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
                            drgbBuffer, 4,
                            NULL, 0);
 
-        j = drgbBuffer[1] % (dscBits - i) + i; 
+        j = drgbBuffer[1] % (ofdm.n_bpsc - i) + i; 
 
         temp = dscShiftArr[j];
         dscShiftArr[j] = dscShiftArr[i];
@@ -278,7 +278,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 			{
 				temp++;
 			}
-			dscShiftArr[temp] = i * 6 + j +;
+			dscShiftArr[temp] = i * 6 + j + 1;
 		}
 	}
 
