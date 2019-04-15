@@ -88,6 +88,9 @@ public:
 	void print();
 };
 
+#define SHARED_SECRET [0xF3, 0x9D, 0x59, 0x9C]
+#define SHARED_SECRET_SIZE 4
+
 /**
  * Given a payload, generates a MAC data frame (i.e., a PSDU) to be given
  * to the physical layer for encoding.
