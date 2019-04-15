@@ -41,7 +41,7 @@ typedef struct _hash_drgb_data {
  *      SUCCESS - If the value is properly set
  *      ERROR - If one of inputs was improper
  */
-Status hash_df(const BYTE* inputStr, 
+Status hash_df(BYTE* inputStr, 
                uint32_t inputStrLen,
                uint32_t bytesToReturn,
                BYTE* outputString,
@@ -62,7 +62,7 @@ Status hash_df(const BYTE* inputStr,
  *      drgb->constValue
  */
 void hash_drgb_init(Hash_DRGB* drgb, 
-                    BYTE* seedInput, 
+                    const BYTE* seedInput, 
                     uint32_t seedInputLen,
                     BYTE* nonce, 
                     uint32_t nonceInputLen,
