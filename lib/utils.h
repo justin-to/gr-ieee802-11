@@ -23,6 +23,8 @@
 #include <cinttypes>
 #include <iostream>
 
+#include "utils.h"
+
 #define MAX_PAYLOAD_SIZE 1500
 #define MAX_PSDU_SIZE (MAX_PAYLOAD_SIZE + 28) // MAC, CRC
 #define MAX_SYM (((16 + 8 * MAX_PSDU_SIZE + 6) / 24) + 1)
@@ -88,7 +90,7 @@ public:
 	void print();
 };
 
-#define SHARED_SECRET [0xF3, 0x9D, 0x59, 0x9C]
+const BYTE SHARED_SECRET[] = {0xF3, 0x9D, 0x59, 0x9C};
 #define SHARED_SECRET_SIZE 4
 
 /**

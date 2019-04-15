@@ -218,7 +218,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 	int shiftArr[ofdm.n_cbps] = {0};
 
 	// Initialize deterministic random number generator
-	hash_drgb_init(&drgb, (uint8_t*)SHARED_SECRET, SHARED_SECRET_SIZE, NULL, 0, NULL, 0);
+	hash_drgb_init(&drgb, SHARED_SECRET, SHARED_SECRET_SIZE, NULL, 0, NULL, 0);
 
 	// Determine which dsc shifts will be used w/ no repetitions
 	i = 0; 
