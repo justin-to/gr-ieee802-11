@@ -20,6 +20,8 @@
 #include <cstring>
 #include <math.h>
 
+#include "hash_drgb.h"
+
 ofdm_param::ofdm_param(Encoding e) {
 	encoding = e;
 
@@ -203,30 +205,93 @@ void puncturing(const char *in, char *out, frame_param &frame, ofdm_param &ofdm)
 }
 
 
-void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse, int num_subcarriers) {
+void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, bool reverse, int num_subcarriers) 
+{
+	Hash_DRGB drgb;
+	int i, j;
+	int temp, newDsc;
+	bool contains;
+	uint8_t drgbBuffer[8];
+	uint64_t temp64;
+	double tempDouble;
+	int dscShiftArr[ofdm.n_bpsc];
+	int shiftArr[ofdm.n_cbps] = {0};
 
-	int n_cbps = ofdm.n_cbps;
-	int first[n_cbps];
-	int second[n_cbps];
-	int s = std::max(ofdm.n_bpsc / 2, 1);
-	// make sure to use nse numbers that are a multiple of 3, can make error check later
-	int num_rows = num_subcarriers / 3; 
+	// Initialize deterministic random number generator
+	hash_drgb_init(&drgb, SHARED_SECRET, SHARED_SECRET_SIZE, NULL, 0, NULL, 0);
 
-	for(int j = 0; j < n_cbps; j++) {
-		first[j] = s * (j / s) + ((j + int(floor(num_rows * j / n_cbps))) % s);
+	// Determine which dsc shifts will be used w/ no repetitions
+	i = 0; 
+	while (i < ofdm.n_bpsc)
+	{
+		hash_drgb_get_rand(&drgb,
+						   drgbBuffer, 8,
+						   NULL, 0);
+		
+		temp64 = *((uint64_t*)drgbBuffer);
+		tempDouble = (double)temp64 / (double)0xFFFFFFFFFFFFFFFF;
+		temp = (int)(tempDouble *48);
+
+		contains = false;
+		for (j = 0; j < i; j++)
+		{
+			if (dscShiftArr[j] == temp)
+			{
+				contains = true;
+				break;
+			}
+		}
+
+		if (!contains)
+		{
+			dscShiftArr[i] = temp;
+			i++;
+		}
 	}
 
-	for(int i = 0; i < n_cbps; i++) {
-		second[i] = num_rows * i - (n_cbps - 1) * int(floor(num_rows * i / n_cbps));
+	// Perform a Fisher Yates Shuffle on the dsc shift ARR
+	for (i = 0; i < ofdm.n_bpsc; i++)
+	{
+		hash_drgb_get_rand(&drgb,
+                           drgbBuffer, 4,
+                           NULL, 0);
+
+        j = drgbBuffer[1] % (ofdm.n_bpsc - i) + i; 
+
+        temp = dscShiftArr[j];
+        dscShiftArr[j] = dscShiftArr[i];
+        dscShiftArr[i] = temp; 
 	}
+
+	// Determine the shift arr
+	for (i = 0; i < num_subcarriers; i++)
+	{
+		for (j = 0; j < ofdm.n_bpsc; j++)
+		{
+			// Shift the bit by the number of 
+			newDsc = (i + dscShiftArr[j]) % num_subcarriers;
+			temp = newDsc * ofdm.n_bpsc;
+			while (dscShiftArr[temp] != 0)
+			{
+				temp++;
+			}
+			dscShiftArr[temp] = i * 6 + j + 1;
+		}
+	}
+
 
 	for(int i = 0; i < frame.n_sym; i++) {
-		for(int k = 0; k < n_cbps; k++) {
-			if(reverse) {
-				out[i * n_cbps + second[first[k]]] = in[i * n_cbps + k];
-			} else {
-				out[i * n_cbps + k] = in[i * n_cbps + second[first[k]]];
+		for (j = 0; j < ofdm.n_cbps; j++)
+		{
+			if (reverse)
+			{
+				out[dscShiftArr[j] - 1] = in[j];
 			}
+			else
+			{
+				out[j] = in[dscShiftArr[j] - 1];
+			}
+			
 		}
 	}
 }

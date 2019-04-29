@@ -110,6 +110,8 @@ list(APPEND gr_ieee802_11_baofdm_sources
     signal_field_impl.cc
     sync_long.cc
     sync_short.cc
+    hash_drgb.c
+    sha256.c
     utils.cc
     viterbi_decoder.cc
 )
