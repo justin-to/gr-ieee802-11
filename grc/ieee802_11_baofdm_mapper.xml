@@ -5,7 +5,7 @@
 	<key>ieee802_11_baofdm_mapper</key>
 	<category>[BA_OFDM_IEEE802.11]</category>
 	<import>import ieee802_11_baofdm</import>
-	<make>ieee802_11_baofdm.mapper($encoding, $debug, $num_subcarriers)</make>
+	<make>ieee802_11_baofdm.mapper($encoding, $num_subcarriers, $debug)</make>
 	<callback>set_encoding($encoding)</callback>
 
 	<param>

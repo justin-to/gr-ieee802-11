@@ -24,7 +24,7 @@ using namespace gr::ieee802_11_baofdm;
 class mapper_impl : public mapper {
 public:
 
-mapper_impl(Encoding e, bool debug, int num_subcarriers) :
+mapper_impl(Encoding e, int num_subcarriers, bool debug) :
 	block ("mapper",
 			gr::io_signature::make(0, 0, 0),
 			gr::io_signature::make(1, 1, sizeof(char))),
@@ -33,14 +33,10 @@ mapper_impl(Encoding e, bool debug, int num_subcarriers) :
 			d_debug(debug),
 			d_scrambler(1),
 			d_ofdm(e),
-			d_num_subs(num_subcarriers){
+            d_num_subs(num_subcarriers) {
 
 	message_port_register_in(pmt::mp("in"));
 	set_encoding(e);
-}
-
-~mapper_impl() {
-	free(d_symbols);
 }
 
 void print_message(const char *msg, size_t len) {
@@ -111,7 +107,7 @@ int general_work(int noutput, gr_vector_int& ninput_items,
 			puncturing(encoded_data, punctured_data, frame, d_ofdm);
 			//std::cout << "punctured" << std::endl;
 			// interleaving
-			interleave(punctured_data, interleaved_data, frame, d_ofdm, d_num_subs);
+			interleave(punctured_data, interleaved_data, frame, d_ofdm, d_num_subs, false);
 			//std::cout << "interleaved" << std::endl;
 
 			// one byte per symbol
@@ -176,12 +172,12 @@ private:
 	char*        d_symbols;
 	int          d_symbols_offset;
 	int          d_symbols_len;
+    int          d_num_subs;
 	ofdm_param   d_ofdm;
-	int			 d_num_subs;
 	gr::thread::mutex d_mutex;
 };
 
 mapper::sptr
-mapper::make(Encoding mcs, bool debug, int num_subcarriers) {
-	return gnuradio::get_initial_sptr(new mapper_impl(mcs, debug, num_subcarriers));
+mapper::make(Encoding mcs, int num_subcarriers, bool debug) {
+	return gnuradio::get_initial_sptr(new mapper_impl(mcs, num_subcarriers, debug));
 }
