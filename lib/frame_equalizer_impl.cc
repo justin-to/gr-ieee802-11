@@ -82,6 +82,7 @@ frame_equalizer_impl::set_algorithm(Equalizer algo) {
 	// under library equalizer, needs to change one of these
 	// choose the default strategy to change
 	// Only LMS has been implemented at this point
+	// Does equalization based on pilot subcarriers
 	case COMB:
 		dout << "Comb" << std::endl;
 		d_equalizer = new equalizer::comb();
@@ -177,8 +178,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		// ask about the hardcoded 64 here, probably needs change
 		for(int i = 0; i < d_num_subs; i++) {
 			current_symbol[i] *= exp(gr_complex(0, 2*M_PI*d_current_symbol*80*(d_epsilon0 + d_er)*(i-32)/64));
-		}
-		// look at the 127 and the minuses that come in 
+		} 
 		gr_complex p = equalizer::base::POLARITY[(d_current_symbol - 2) % 127];
 		gr_complex sum =
 			(current_symbol[11] *  p) +
