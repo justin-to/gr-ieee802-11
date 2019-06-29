@@ -1,0 +1,170 @@
+Warning: failed to XInitThreads()
+MAPPER: encoding: 0
+LMS
+set_min_output_buffer on block 9 to 397056
+set_min_output_buffer on block 11 to 397056
+set_min_output_buffer on block 13 to 397056
+set_min_output_buffer on block 14 to 397056
+set_min_output_buffer on block 16 to 397056
+set_min_output_buffer on block 31 to 96000
+FRAME EQUALIZER: input 13  output 12
+epsilon: 1.2652e-08
+Encoding: 3 Mbit/s   FRAME EQUALIZER: input 4  output 3
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 25  output 24
+FRAME EQUALIZER: input 55  output 48
+FRAME EQUALIZER: input 79  output 48
+FRAME EQUALIZER: input 38  output 24
+FRAME EQUALIZER: input 14  output 12
+FRAME EQUALIZER: input 2  output 1
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 8  output 6
+FRAME EQUALIZER: input 16  output 12
+epsilon: -8.95667e-09
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 0
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: 0
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxFRAME EQUALIZER: input x23x  output x12
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 31  output 24
+FRAME EQUALIZER: input 64  output 48
+FRAME EQUALIZER: input 76  output 48
+FRAME EQUALIZER: input 28  output 24
+FRAME EQUALIZER: input 4  output 3
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 7  output 6
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 12  output 12
+epsilon: 6.48734e-10
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 1
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: FRAME EQUALIZER: input 0
+1  output 1
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 4  output 3
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 16  output 12
+FRAME EQUALIZER: input 35  output 24
+FRAME EQUALIZER: input 11  output 6
+FRAME EQUALIZER: input 5  output 3
+FRAME EQUALIZER: input 2  output 1
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 4  output 3
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 32  output 24
+FRAME EQUALIZER: input 59  output 48
+FRAME EQUALIZER: input 35  output 24
+FRAME EQUALIZER: input 11  output 6
+FRAME EQUALIZER: input 5  output 3
+FRAME EQUALIZER: input 2  output 1
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 8  output 6
+FRAME EQUALIZER: input 13  output 12
+epsilon: -1.07457e-08
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 2
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: 0
+FRAME EQUALIZER: input 12  output 12
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 13  output 12
+FRAME EQUALIZER: input 21  output 12
+FRAME EQUALIZER: input 40  output 24
+FRAME EQUALIZER: input 46  output 24
+FRAME EQUALIZER: input 78  output 48
+FRAME EQUALIZER: input 30  output 24
+FRAME EQUALIZER: input 6  output 6
+FRAME EQUALIZER: input 8  output 6
+FRAME EQUALIZER: input 13  output 12
+epsilon: -1.29351e-08
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 3
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: 0
+FRAME EQUALIZER: input 16  output 12
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 30  output 24
+FRAME EQUALIZER: input 40  output 24
+FRAME EQUALIZER: input 42  output 24
+FRAME EQUALIZER: input 70  output 48
+FRAME EQUALIZER: input 30  output 24
+FRAME EQUALIZER: input 6  output 6
+FRAME EQUALIZER: input 8  output 6
+FRAME EQUALIZER: input 13  output 12
+epsilon: 2.28709e-08
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 4
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: FRAME EQUALIZER: input 4  output 3
+0
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 22  output 12
+FRAME EQUALIZER: input 30  output 24
+FRAME EQUALIZER: input 63  output 48
+FRAME EQUALIZER: input 75  output 48
+FRAME EQUALIZER: input 27  output 24
+FRAME EQUALIZER: input 3  output 3
+FRAME EQUALIZER: input 7  output 6
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 12  output 12
+epsilon: 6.94454e-09
+Encoding: 3 Mbit/s   
+new mac frame  (length 524)
+=========================================
+duration: 00 00
+frame control: 00 08 (DATA)
+Subtype: Data
+seq nr: 5
+mac 1: 42:42:42:42:42:42
+mac 2: 23:23:23:23:23:23
+mac 3: ff:ff:ff:ff:ff:ff
+instantaneous fer: 0
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+FRAME EQUALIZER: input 20  output 12
+FRAME EQUALIZER: input 14  output 12
+FRAME EQUALIZER: input 2  output 1
+FRAME EQUALIZER: input 1  output 1
+FRAME EQUALIZER: input 64  output 48
+FRAME EQUALIZER: input 79  output 48
+FRAME EQUALIZER: input 41  output 24
+FRAME EQUALIZER: input 17  output 12
+FRAME EQUALIZER: input 5  output 3
+FRAME EQUALIZER: input 2  output 1
+FRAME EQUALIZER: input 1  output 1

@@ -47,8 +47,8 @@ private:
 
 
 	bool parse_signal(uint8_t *signal);
-	bool decode_signal_field(uint8_t *rx_bits);
-	void deinterleave(uint8_t *rx_bits);
+	bool decode_signal_field(uint8_t *rx_bits, int num_data_subs);
+	void deinterleave(uint8_t *rx_bits, int num_data_subs);
 
 	equalizer::base *d_equalizer;
 	gr::thread::mutex d_mutex;

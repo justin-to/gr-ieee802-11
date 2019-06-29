@@ -24,6 +24,8 @@
 #include "utils.h"
 #include <gnuradio/io_signature.h>
 
+#define HEADER_SUBS 48
+
 namespace gr {
 namespace ieee802_11_baofdm {
 
@@ -45,7 +47,7 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 
 	//raw pointers to allocated memory 
 	d_prev_pilots = new gr_complex[d_num_pilots];
-	d_deinterleaved = new uint8_t[d_num_data];
+	d_deinterleaved = new uint8_t[48];
 	symbols = new gr_complex[d_num_data];
 	interleaver_pattern = new int[d_num_data];
 	interleave_pattern_calc();
@@ -142,9 +144,16 @@ frame_equalizer_impl::general_work (int noutput_items,
   if (d_occupied_carriers.empty()) {
     throw std::invalid_argument("Occupied carriers must be of type vector of vector i.e. ((),).");
   }
+
+    const std::vector<int> standard_carriers = { 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58 };
 	int i = 0;
 	int o = 0;
-	gr_complex symbols[d_num_data];
+    int num_data_subs = HEADER_SUBS;
+	gr_complex symbols_header[HEADER_SUBS];
+	gr_complex symbols_data[d_num_data];
+    gr_complex *symbols;
+    const std::vector<int> *used_carriers;
+
 	gr_complex current_symbol[d_num_subs];
 
 	dout << "FRAME EQUALIZER: input " << ninput_items[0] << "  output " << noutput_items << std::endl;
@@ -171,6 +180,19 @@ frame_equalizer_impl::general_work (int noutput_items,
 			i++;
 			continue;
 		}
+
+        // processing header -> use default numbers
+        if(d_current_symbol < 2) {
+            symbols = symbols_header;
+            num_data_subs = HEADER_SUBS;
+            used_carriers = &standard_carriers;
+        }
+        // processing data -> use data carrier configuration
+        else {
+            symbols = symbols_data;
+            num_data_subs = d_num_data;
+            used_carriers = &d_occupied_carriers[0];
+        }
 
 		std::memcpy(current_symbol, in + i*d_num_subs, d_num_subs*sizeof(gr_complex));
 
@@ -229,16 +251,16 @@ frame_equalizer_impl::general_work (int noutput_items,
 
 		// do equalization
 		d_equalizer->equalize(current_symbol, d_current_symbol,
-				symbols, out + o * d_num_data, d_frame_mod, d_occupied_carriers[0]);
+				symbols, out + o * num_data_subs, d_frame_mod, *used_carriers);
 
 		// signal field
 		if(d_current_symbol == 2) {
 
-			if(decode_signal_field(out + o * d_num_data)) {
+			if(decode_signal_field(out + o * HEADER_SUBS, num_data_subs)) {
 
 				pmt::pmt_t dict = pmt::make_dict();
 				dict = pmt::dict_add(dict, pmt::mp("frame_bytes"), pmt::from_uint64(d_frame_bytes));
-				dict = pmt::dict_add(dict, pmt::mp("encoding"), pmt::from_uint64(d_frame_encoding));
+                dict = pmt::dict_add(dict, pmt::mp("encoding"), pmt::from_uint64(d_frame_encoding));
 				dict = pmt::dict_add(dict, pmt::mp("snr"), pmt::from_double(d_equalizer->get_snr()));
 				dict = pmt::dict_add(dict, pmt::mp("freq"), pmt::from_double(d_freq));
 				dict = pmt::dict_add(dict, pmt::mp("freq_offset"), pmt::from_double(d_freq_offset_from_synclong));
@@ -252,7 +274,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		if(d_current_symbol > 2) {
 			o++;
 			pmt::pmt_t pdu = pmt::make_dict();
-			message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(d_num_data, symbols)));
+			message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(num_data_subs, symbols)));
 		}
 
 		i++;
@@ -264,21 +286,22 @@ frame_equalizer_impl::general_work (int noutput_items,
 }
 
 bool
-frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
+frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits, int num_data_subs) {
 
 	static ofdm_param ofdm(BPSK_1_2);
 	static frame_param frame(ofdm, 0);;
 
-	deinterleave(rx_bits);
+	deinterleave(rx_bits, num_data_subs);
 	uint8_t *decoded_bits = d_decoder.decode(&ofdm, &frame, d_deinterleaved);
 
 	return parse_signal(decoded_bits);
 }
 
+// FIXME: Change this to take num_data_subs, not use d_num_data
 void
-frame_equalizer_impl::deinterleave(uint8_t *rx_bits) {
-	for(int i = 0; i < d_num_data; i++) {
-		d_deinterleaved[i] = rx_bits[interleaver_pattern[i]];
+frame_equalizer_impl::deinterleave(uint8_t *rx_bits, int num_data_subs) {
+	for(int i = 0; i < HEADER_SUBS; i++) {
+		d_deinterleaved[i] = rx_bits[interleaver_pattern[i % d_num_data]];
 	}
 }
 
@@ -365,19 +388,6 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 	return true;
 }
 
-/* hardcoded 48, change to function that calculates on the fly
- how to make sure this function gets called? Thinking xml callback
-
-const int
-frame_equalizer_impl::interleaver_pattern[48] = {
-	 0, 3, 6, 9,12,15,18,21,
-	24,27,30,33,36,39,42,45,
-	 1, 4, 7,10,13,16,19,22,
-	25,28,31,34,37,40,43,46,
-	 2, 5, 8,11,14,17,20,23,
-	26,29,32,35,38,41,44,47};
-	*/
-
 void frame_equalizer_impl::interleave_pattern_calc() {
 	int array_val = 0;
 	int temp_array_val = 0;
@@ -390,6 +400,7 @@ void frame_equalizer_impl::interleave_pattern_calc() {
 		}
 	}
 }
+
 
 } /* namespace ieee802_11_baofdm */
 } /* namespace gr */
