@@ -47,8 +47,8 @@ private:
 
 
 	bool parse_signal(uint8_t *signal);
-	bool decode_signal_field(uint8_t *rx_bits, int num_data_subs);
-	void deinterleave(uint8_t *rx_bits, int num_data_subs);
+	bool decode_signal_field(uint8_t *rx_bits);
+	void deinterleave(uint8_t *rx_bits);
 
 	equalizer::base *d_equalizer;
 	gr::thread::mutex d_mutex;
@@ -58,10 +58,6 @@ private:
 	int  d_current_symbol;
 	viterbi_decoder d_decoder;
 	const std::vector<std::vector<int>> d_occupied_carriers;
-
-	// added function to perform interleave pattern calculation
-	// has no check for numbers that are not mutiples of 3, can add error message later
-	void interleave_pattern_calc();
 
 	// freq offset
 	double d_freq;  // Hz
@@ -88,7 +84,7 @@ private:
 	constellation_16qam::sptr d_16qam;
 	constellation_64qam::sptr d_64qam;
 
-	int *interleaver_pattern;
+ 	static const int interleaver_pattern[48];
 };
 
 } // namespace ieee802_11_baofdm

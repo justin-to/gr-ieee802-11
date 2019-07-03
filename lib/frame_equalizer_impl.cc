@@ -49,8 +49,6 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 	d_prev_pilots = new gr_complex[d_num_pilots];
 	d_deinterleaved = new uint8_t[48];
 	symbols = new gr_complex[d_num_data];
-	interleaver_pattern = new int[d_num_data];
-	interleave_pattern_calc();
 
 	message_port_register_out(pmt::mp("symbols"));
 
@@ -70,7 +68,6 @@ frame_equalizer_impl::~frame_equalizer_impl() {
 	delete[] d_prev_pilots;
 	delete[] d_deinterleaved;
 	delete[] symbols;
-	delete[] interleaver_pattern;
 }
 
 
@@ -145,6 +142,7 @@ frame_equalizer_impl::general_work (int noutput_items,
     throw std::invalid_argument("Occupied carriers must be of type vector of vector i.e. ((),).");
   }
 
+    // all data carriers, only used when processing headers
     const std::vector<int> standard_carriers = { 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58 };
 	int i = 0;
 	int o = 0;
@@ -166,6 +164,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		if(tags.size()) {
 			d_current_symbol = 0;
 			d_frame_symbols = 0;
+            // default to bpsk for the header
 			d_frame_mod = d_bpsk;
 
 			d_freq_offset_from_synclong = pmt::to_double(tags.front().value) * d_bw / (2 * M_PI);
@@ -182,7 +181,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		}
 
         // processing header -> use default numbers
-        if(d_current_symbol < 2) {
+        if(d_current_symbol <= 2) {
             symbols = symbols_header;
             num_data_subs = HEADER_SUBS;
             used_carriers = &standard_carriers;
@@ -243,6 +242,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 		}
 
 		// update estimate of residual frequency offset
+        // we don't care about < 2 because this is the preamble (I think)
 		if(d_current_symbol >= 2) {
 
 			double alpha = 0.1;
@@ -253,10 +253,13 @@ frame_equalizer_impl::general_work (int noutput_items,
 		d_equalizer->equalize(current_symbol, d_current_symbol,
 				symbols, out + o * num_data_subs, d_frame_mod, *used_carriers);
 
-		// signal field
+		// signal field (the header)
+        // we don't care about < 2 because this is the preamble (I think)
+        // currently the header uses all 48 data carriers for interleaving and convolutional coding, whereas the data does NOT
 		if(d_current_symbol == 2) {
 
-			if(decode_signal_field(out + o * HEADER_SUBS, num_data_subs)) {
+            // parse the header
+			if(decode_signal_field(out + o * HEADER_SUBS)) {
 
 				pmt::pmt_t dict = pmt::make_dict();
 				dict = pmt::dict_add(dict, pmt::mp("frame_bytes"), pmt::from_uint64(d_frame_bytes));
@@ -271,6 +274,8 @@ frame_equalizer_impl::general_work (int noutput_items,
 			}
 		}
 
+        // everything after the header is data
+        // increment output and emit message when we find data
 		if(d_current_symbol > 2) {
 			o++;
 			pmt::pmt_t pdu = pmt::make_dict();
@@ -286,25 +291,27 @@ frame_equalizer_impl::general_work (int noutput_items,
 }
 
 bool
-frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits, int num_data_subs) {
+frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
 
+    // parse the header using a default encoding
 	static ofdm_param ofdm(BPSK_1_2);
-	static frame_param frame(ofdm, 0);;
+	static frame_param frame(ofdm, 0);
 
-	deinterleave(rx_bits, num_data_subs);
+	deinterleave(rx_bits);
 	uint8_t *decoded_bits = d_decoder.decode(&ofdm, &frame, d_deinterleaved);
 
 	return parse_signal(decoded_bits);
 }
 
-// FIXME: Change this to take num_data_subs, not use d_num_data
 void
-frame_equalizer_impl::deinterleave(uint8_t *rx_bits, int num_data_subs) {
+frame_equalizer_impl::deinterleave(uint8_t *rx_bits) {
+    // header currently uses all 48 data carriers, so we deinterleave it accordingly
 	for(int i = 0; i < HEADER_SUBS; i++) {
-		d_deinterleaved[i] = rx_bits[interleaver_pattern[i % d_num_data]];
+		d_deinterleaved[i] = rx_bits[interleaver_pattern[i]];
 	}
 }
 
+// unpacks header fields that are necessary for decoding/demoding data
 bool
 frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 
@@ -313,7 +320,6 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 	bool parity = false;
 	for(int i = 0; i < 17; i++) {
 		parity ^= decoded_bits[i];
-		// hardcoded 4, number of pilots possibly?
 		if((i < 4) && decoded_bits[i]) {
 			r = r | (1 << i);
 		}
@@ -328,7 +334,6 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 		return false;
 	}
 
-	// look into the 16 hardcoded here
 	switch(r) {
 	case 11:
 		d_frame_encoding = 0;
@@ -388,19 +393,15 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 	return true;
 }
 
-void frame_equalizer_impl::interleave_pattern_calc() {
-	int array_val = 0;
-	int temp_array_val = 0;
-	for (int index = 0; index < d_num_data; index++) {
-		interleaver_pattern[index] = array_val;
-		array_val += 3;
-		if (array_val >= d_num_data) {
-			temp_array_val += 1;
-			array_val = temp_array_val;
-		}
-	}
-}
 
+const int
+frame_equalizer_impl::interleaver_pattern[48] = {
+	 0, 3, 6, 9,12,15,18,21,
+	24,27,30,33,36,39,42,45,
+	 1, 4, 7,10,13,16,19,22,
+	25,28,31,34,37,40,43,46,
+	 2, 5, 8,11,14,17,20,23,
+	26,29,32,35,38,41,44,47};
 
 } /* namespace ieee802_11_baofdm */
 } /* namespace gr */
