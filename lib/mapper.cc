@@ -39,6 +39,10 @@ mapper_impl(Encoding e, int num_subcarriers, bool debug) :
 	set_encoding(e);
 }
 
+~mapper_impl() {
+    free(d_symbols);
+}
+
 void print_message(const char *msg, size_t len) {
 
 

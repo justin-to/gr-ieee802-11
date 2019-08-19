@@ -25,9 +25,14 @@ ofdm_param::ofdm_param(Encoding e) {
 
 	switch(e) {
 		case BPSK_1_2:
+            // bits per data carrier
 			n_bpsc = 1;
+            // parity bits per ofdm symbol (I think)
 			n_cbps = 48;
+            // data bits per ofdm symbol
 			n_dbps = 24;
+            // data rate
+            // this gets read out in reverse
 			rate_field = 0x0D; // 0b00001101
 			break;
 
@@ -102,6 +107,8 @@ frame_param::frame_param(ofdm_param &ofdm, int psdu_length) {
 	psdu_size = psdu_length;
 
 	// number of symbols (17-11)
+    // total number of symbols needed to transmit this frame
+    // 16 service bits + PSDU bits + 6 tail bits
 	n_sym = (int) ceil((16 + 8 * psdu_size + 6) / (double) ofdm.n_dbps);
 
 	n_data_bits = n_sym * ofdm.n_dbps;
@@ -234,6 +241,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 
 void split_symbols(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, int num_subcarriers) {
 
+    // number of OFDM symbols * number of subcarriers = number of data symbols
 	int symbols = frame.n_sym * num_subcarriers;
 
 	for (int i = 0; i < symbols; i++) {

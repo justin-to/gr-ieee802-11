@@ -46,9 +46,8 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 	d_num_pilots(num_pilots), d_occupied_carriers(occupied_carriers) {
 
 	//raw pointers to allocated memory 
-	d_prev_pilots = new gr_complex[d_num_pilots];
-	d_deinterleaved = new uint8_t[48];
-	symbols = new gr_complex[d_num_data];
+	d_prev_pilots = new gr_complex[d_num_pilots]();
+	d_deinterleaved = new uint8_t[48]();
 
 	message_port_register_out(pmt::mp("symbols"));
 
@@ -67,7 +66,6 @@ frame_equalizer_impl::frame_equalizer_impl(Equalizer algo, double freq, double b
 frame_equalizer_impl::~frame_equalizer_impl() {
 	delete[] d_prev_pilots;
 	delete[] d_deinterleaved;
-	delete[] symbols;
 }
 
 
@@ -149,10 +147,14 @@ frame_equalizer_impl::general_work (int noutput_items,
     int num_data_subs = HEADER_SUBS;
 	gr_complex symbols_header[HEADER_SUBS];
 	gr_complex symbols_data[d_num_data];
-    gr_complex *symbols;
     const std::vector<int> *used_carriers;
 
+    // current OFDM symbol
 	gr_complex current_symbol[d_num_subs];
+
+    memset(symbols_header, 0, sizeof(gr_complex)*HEADER_SUBS);
+    memset(symbols_data, 0, sizeof(gr_complex)*d_num_data);
+    memset(current_symbol, 0, sizeof(gr_complex)*d_num_subs);
 
 	dout << "FRAME EQUALIZER: input " << ninput_items[0] << "  output " << noutput_items << std::endl;
 
@@ -293,7 +295,7 @@ frame_equalizer_impl::general_work (int noutput_items,
 bool
 frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
 
-    // parse the header using a default encoding
+    // parse the header using a default modulation scheme
 	static ofdm_param ofdm(BPSK_1_2);
 	static frame_param frame(ofdm, 0);
 

@@ -25,9 +25,11 @@ using namespace gr::ieee802_11_baofdm::equalizer;
 void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits,
 	boost::shared_ptr<gr::digital::constellation> mod, const std::vector<int> &occupied_carriers) {
 
+    // copy over first long sync symbol
 	if(n == 0) {
 		std::memcpy(d_H, in, 64 * sizeof(gr_complex));
 
+    // copy over second long sync symbol and do some equalization stuff
 	} else if(n == 1) {
 		double signal = 0;
 		double noise = 0;
@@ -44,6 +46,7 @@ void lms::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits,
 
 		d_snr = 10 * std::log10(signal / noise / 2);
 
+    // start copying over data and continue equalization
 	} else {
 		int c = 0;
 		for(int i = 0; i < 64; i++) {
