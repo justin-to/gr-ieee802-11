@@ -159,7 +159,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>48</value>
+      <value>24</value>
     </param>
   </block>
   <block>
@@ -186,7 +186,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>range(-26, -21) + range(-20, -7) + range(-6, 0) + range(1, 7) + range(8, 21) + range(22, 27)</value>
+      <value>range(1, 7) + range(8, 21) + range(22, 27)</value>
     </param>
   </block>
   <block>
@@ -643,7 +643,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(872, 748)</value>
+      <value>(1016, 748)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1047,7 +1047,7 @@ the length and encoding schemeof the frame.</value>
     </param>
     <param>
       <key>value</key>
-      <value>ieee802_11_baofdm.BPSK_1_2</value>
+      <value>0</value>
     </param>
   </block>
   <block>

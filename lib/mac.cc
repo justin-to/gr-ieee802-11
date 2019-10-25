@@ -163,6 +163,7 @@ bool check_mac(std::vector<uint8_t> mac) {
 }
 
 private:
+    // Sequence control 16 bits
 	uint16_t d_seq_nr;
 	uint8_t d_src_mac[6];
 	uint8_t d_dst_mac[6];

@@ -332,6 +332,7 @@ viterbi_decoder::reset() {
 
 	switch(d_ofdm->encoding) {
 	case BPSK_1_2:
+	case BPSK_1_2_HEADER:
 	case QPSK_1_2:
 	case QAM16_1_2:
 		d_ntraceback = 5;

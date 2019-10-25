@@ -141,6 +141,9 @@ frame_equalizer_impl::general_work (int noutput_items,
   }
 
     // all data carriers, only used when processing headers
+    // MAC header is identical for all management frames
+    // Octets -> Control Field (2) | Duration of transmission (2) | DA or MAC address destination (6) | SA or MAC address source destination (6) | BSSID or Address of access point (6) | 
+    // Sequence Number (2) | Data (0 - 2312) | CRC (4)
     const std::vector<int> standard_carriers = { 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58 };
 	int i = 0;
 	int o = 0;
@@ -183,6 +186,8 @@ frame_equalizer_impl::general_work (int noutput_items,
 		}
 
         // processing header -> use default numbers
+        // preamble contains 12 OFDM symbols to syhcnronize transmitter and receiver. Duration of preamble divided into two parts -> first part sends 10 OFDM traning symbols, second 
+        // part starts with a guard interval follow by 2 OFDM traning symbols (last 2 symbols use 52 available usbcarriers with BPSK modulation).
         if(d_current_symbol <= 2) {
             symbols = symbols_header;
             num_data_subs = HEADER_SUBS;
@@ -296,7 +301,7 @@ bool
 frame_equalizer_impl::decode_signal_field(uint8_t *rx_bits) {
 
     // parse the header using a default modulation scheme
-	static ofdm_param ofdm(BPSK_1_2);
+	static ofdm_param ofdm(BPSK_1_2_HEADER);
 	static frame_param frame(ofdm, 0);
 
 	deinterleave(rx_bits);
@@ -336,10 +341,11 @@ frame_equalizer_impl::parse_signal(uint8_t *decoded_bits) {
 		return false;
 	}
 
+    // NEED TO MODIFY THIS WHEN WE CHANGE OFDM_PARAM
 	switch(r) {
 	case 11:
 		d_frame_encoding = 0;
-		d_frame_symbols = (int) ceil((16 + 8 * d_frame_bytes + 6) / (double) 24);
+		d_frame_symbols = (int) ceil((16 + 8 * d_frame_bytes + 6) / (double) 12); // divide by 12, not 24, when using 24 subcarriers
 		d_frame_mod = d_bpsk;
 		dout << "Encoding: 3 Mbit/s   ";
 		break;

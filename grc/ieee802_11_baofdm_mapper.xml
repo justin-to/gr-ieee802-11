@@ -46,6 +46,10 @@
 			<name>64QAM 3/4</name>
 			<key>ieee802_11_baofdm.64QAM_3_4</key>
 		</option>
+		<option>
+			<name>HEADER</name>
+			<key>ieee802_11_baofdm.BPSK_1_2_HEADER</key>
+		</option>
 	</param>
 
 	<param>
@@ -70,7 +74,7 @@
 		<type>int</type>
 	</param>
 
-	<check>$encoding in range(8)</check>
+	<check>$encoding in range(9)</check>
 
 	<sink>
 		<name>in</name>

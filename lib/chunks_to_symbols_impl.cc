@@ -64,22 +64,31 @@ chunks_to_symbols_impl::work(int noutput_items,
 	Encoding encoding = (Encoding)pmt::to_long(tags[0].value);
 
 	switch (encoding) {
+    // Data rate 6, coding rate 1/2, 1 coded bit per subcarrier, 48 coded bits for OFDM symbol, 24 data bits per subcarrier
 	case BPSK_1_2:
+	case BPSK_1_2_HEADER:
+    // Data rate 9, coding rate 3/4, 1 coded bit per subcarrier, 48 coded bits for OFDM symbol, 36 data bits per subcarrier
 	case BPSK_3_4:
 		d_mapping = d_bpsk;
 		break;
 
+    // Data rate 12, coding rate 1/2, 2 coded bit per subcarrier, 96 coded bits for OFDM symbol, 48 data bits per subcarrier
 	case QPSK_1_2:
+    // Data rate 18, coding rate 3/4, 2 coded bit per subcarrier, 96 coded bits for OFDM symbol, 72 data bits per subcarrier
 	case QPSK_3_4:
 		d_mapping = d_qpsk;
 		break;
 
+    // Data rate 24, coding rate 1/2, 4 coded bit per subcarrier, 192 coded bits for OFDM symbol, 96 data bits per subcarrier
 	case QAM16_1_2:
+    // Data rate 36, coding rate 3/4, 4 coded bit per subcarrier, 192 coded bits for OFDM symbol, 144 data bits per subcarrier
 	case QAM16_3_4:
 		d_mapping = d_16qam;
 		break;
 
+    // Data rate 48, coding rate 2/3, 6 coded bit per subcarrier, 288 coded bits for OFDM symbol, 192 data bits per subcarrier
 	case QAM64_2_3:
+    // Data rate 25, coding rate 3/4, 6 coded bit per subcarrier, 288 coded bits for OFDM symbol, 216 data bits per subcarrier
 	case QAM64_3_4:
 		d_mapping = d_64qam;
 		break;

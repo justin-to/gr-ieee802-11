@@ -39,6 +39,9 @@ int signal_field_impl::get_bit(int b, int i) {
 	return (b & (1 << i) ? 1 : 0);
 }
 
+// service field is transmitted within data part of PDU as an OFDM symbol of 3.2 microseconds
+// with guard interval of 0.8 micro seconds
+
 
 void signal_field_impl::generate_signal_field(char *out, frame_param &frame, ofdm_param &ofdm) {
 
@@ -54,13 +57,17 @@ void signal_field_impl::generate_signal_field(char *out, frame_param &frame, ofd
 	int length = frame.psdu_size;
 
 	// first 4 bits represent the modulation and coding scheme
+    // represents data rate 
+    // tail field and pad are used in a way so that total length is a multiple of the length
+    // of a block 
+    // length of block depends on modulation and coding scheme
 	signal_header[ 0] = get_bit(ofdm.rate_field, 3);
 	signal_header[ 1] = get_bit(ofdm.rate_field, 2);
 	signal_header[ 2] = get_bit(ofdm.rate_field, 1);
 	signal_header[ 3] = get_bit(ofdm.rate_field, 0);
-	// 5th bit is reserved and must be set to 0
+	// 5th bit is reserved for future use and must be set to 0
 	signal_header[ 4] = 0;
-	// then 12 bits represent the length
+	// then 12 bits represent the length 
 	signal_header[ 5] = get_bit(length,  0);
 	signal_header[ 6] = get_bit(length,  1);
 	signal_header[ 7] = get_bit(length,  2);
@@ -73,7 +80,7 @@ void signal_field_impl::generate_signal_field(char *out, frame_param &frame, ofd
 	signal_header[14] = get_bit(length,  9);
 	signal_header[15] = get_bit(length, 10);
 	signal_header[16] = get_bit(length, 11);
-	//18-th bit is the parity bit for the first 17 bits
+	//18-th bit is the parity bit for the first 17 bits and protects them against errors
 	int sum = 0;
 	for(int i = 0; i < 17; i++) {
 		if(signal_header[i]) {
@@ -82,12 +89,12 @@ void signal_field_impl::generate_signal_field(char *out, frame_param &frame, ofd
 	}
 	signal_header[17] = sum % 2;
 
-	// last 6 bits must be set to 0
+	// last 6 bits must be set to 0 (000000) to help initialize the scrambler
 	for (int i = 0; i < 6; i++) {
 		signal_header[18 + i] = 0;
 	}
 
-	ofdm_param signal_ofdm(BPSK_1_2);
+	ofdm_param signal_ofdm(BPSK_1_2_HEADER);
 	frame_param signal_param(signal_ofdm, 0);
 
 	// convolutional encoding (scrambling is not needed)

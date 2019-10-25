@@ -28,9 +28,9 @@ ofdm_param::ofdm_param(Encoding e) {
             // bits per data carrier
 			n_bpsc = 1;
             // parity bits per ofdm symbol (I think)
-			n_cbps = 48;
+			n_cbps = 24; // 24 when using 24 subs
             // data bits per ofdm symbol
-			n_dbps = 24;
+			n_dbps = 12; // 12 when using 24 subs
             // data rate
             // this gets read out in reverse
 			rate_field = 0x0D; // 0b00001101
@@ -84,6 +84,19 @@ ofdm_param::ofdm_param(Encoding e) {
 			n_dbps = 216;
 			rate_field = 0x03; // 0b00000011
 			break;
+
+		case BPSK_1_2_HEADER:
+            // bits per data carrier
+			n_bpsc = 1;
+            // parity bits per ofdm symbol (I think)
+			n_cbps = 48;
+            // data bits per ofdm symbol
+			n_dbps = 24;
+            // data rate
+            // this gets read out in reverse
+			rate_field = 0x0D; // 0b00001101
+			break;
+
 		defaut:
 			assert(false);
 			break;
@@ -142,7 +155,7 @@ void scramble(const char *in, char *out, frame_param &frame, char initial_state)
     }
 }
 
-
+// zero out only the tail bits
 void reset_tail_bits(char *scrambled_data, frame_param &frame) {
 	memset(scrambled_data + frame.n_data_bits - frame.n_pad - 6, 0, 6 * sizeof(char));
 }
@@ -179,6 +192,7 @@ void puncturing(const char *in, char *out, frame_param &frame, ofdm_param &ofdm)
 	for (int i = 0; i < frame.n_data_bits * 2; i++) {
 		switch(ofdm.encoding) {
 			case BPSK_1_2:
+			case BPSK_1_2_HEADER:
 			case QPSK_1_2:
 			case QAM16_1_2:
 				*out = in[i];
@@ -238,7 +252,7 @@ void interleave(const char *in, char *out, frame_param &frame, ofdm_param &ofdm,
 	}
 }
 
-
+// repack bits into data symbols
 void split_symbols(const char *in, char *out, frame_param &frame, ofdm_param &ofdm, int num_subcarriers) {
 
     // number of OFDM symbols * number of subcarriers = number of data symbols

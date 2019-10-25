@@ -65,7 +65,6 @@ private:
 	double d_bw;  // Hz
 	double d_er;
 	double d_epsilon0;
-	// 4 for the number of pilots?
 	gr_complex *d_prev_pilots;
 
 	int  d_frame_bytes;

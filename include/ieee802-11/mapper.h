@@ -29,6 +29,7 @@ enum Encoding {
 	QAM16_3_4 = 5,
 	QAM64_2_3 = 6,
 	QAM64_3_4 = 7,
+	BPSK_1_2_HEADER  = 8,
 };
 
 namespace gr {

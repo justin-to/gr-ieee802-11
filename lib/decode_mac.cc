@@ -233,17 +233,14 @@ void print_output() {
 
 	dout << std::endl;
 	dout << "psdu size" << d_frame.psdu_size << std::endl;
-	// why begin at index 2, skipping preamble?
 	for(int i = 2; i < d_frame.psdu_size+2; i++) {
 		dout << std::setfill('0') << std::setw(2) << std::hex << ((unsigned int)out_bytes[i] & 0xFF) << std::dec << " ";
-		// why 15, has to do with short training field?
 		if(i % 16 == 15) {
 			dout << std::endl;
 		}
 	}
 	dout << std::endl;
 	for(int i = 2; i < d_frame.psdu_size+2; i++) {
-		// why 127 and 31?
 		if((out_bytes[i] > 31) && (out_bytes[i] < 127)) {
 			dout << ((char) out_bytes[i]);
 		} else {
